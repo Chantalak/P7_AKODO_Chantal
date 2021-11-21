@@ -9,15 +9,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        //association avec user
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
       title: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       content: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       attachment: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       createdAt: {
