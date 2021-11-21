@@ -1,6 +1,5 @@
 //import d'express création REST API
 const express = require('express');
-
 //application express
 const app = express();
 
@@ -15,5 +14,9 @@ app.use((req, res, next) => {
 //obsolescence bodyparser
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));  
+
+//models dans la base de données
+const db = require("./models");
+db.sequelize.sync();
 
 module.exports = app;
