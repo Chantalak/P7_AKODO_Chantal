@@ -2,6 +2,9 @@
 const express = require('express');
 //application express
 const app = express();
+//accéder path serveur
+const path = require('path');
+
 
 //middleware général appliquer à toutes les requetes envoyées serveurs
 app.use((req, res, next) => {
