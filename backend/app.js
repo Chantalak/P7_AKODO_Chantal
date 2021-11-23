@@ -1,10 +1,11 @@
-//import d'express création REST API
+//importation d'express création REST API application express
 const express = require('express');
-//application express
 const app = express();
 //accéder path serveur
 const path = require('path');
 
+//eregistrements routeur
+const userRoutes = require('./routes/user');
 
 //middleware général appliquer à toutes les requetes envoyées serveurs
 app.use((req, res, next) => {
@@ -21,5 +22,10 @@ app.use(express.urlencoded({extended: true}));
 //models dans la base de données
 const db = require("./models");
 db.sequelize.sync();
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//enregistrement des routes 
+app.use('/api/user', userRoutes);
 
 module.exports = app;
