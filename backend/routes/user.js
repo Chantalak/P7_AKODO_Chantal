@@ -21,4 +21,5 @@ router.put('/modify', auth, userCtrl.modify);
 //supprimer profil
 router.delete('/delete', auth, multer, userCtrl.delete);
 
+//exporte routeur
 module.exports = router;

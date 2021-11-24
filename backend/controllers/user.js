@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-
 const db = require("../models");
+const fs = require('fs');
 
 exports.signup = (req, res, next) => {
     //récupération paramètres envoyés dans la requête
@@ -12,7 +11,7 @@ exports.signup = (req, res, next) => {
 
     //vérification que tous les champs obligatoires sont remplis
     if(email === null || name == null || password === null ) {
-        return res.status(400).json({'error': "Certains champs ne sont pas bien remplis"});
+        return res.status(400).json({ error: "Certains champs ne sont pas bien remplis" });
     }
 
     //vérification si utilisateur existe déja dans la BDD
@@ -51,7 +50,7 @@ exports.login = (req, res, next) => {
 
     //vérification que tous les champs sont remplis
     if(email === null || password === null ) {
-        return res.status(400).json({'error': "Certains champs ne sont pas remplis"});
+        return res.status(400).json({ error: "Certains champs ne sont pas remplis" });
     }
 
     //vérification si utilisateur existe déja dans la BDD
@@ -112,7 +111,7 @@ exports.modify = (req, res, next) => {
     .then((user) => {
         if(user) {
             user.update({
-                ...req.body, id:  req.params.id}, { where: {id: req.params.id}
+                ...req.body,
             })
             .then(() => res.status(200).json({ message: "Votre nom d'utilisateur a été modifié !"}))
             .catch(error => res.status(400).json({ error }));
