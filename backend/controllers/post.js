@@ -27,7 +27,7 @@ exports.create = (req, res, next) => {
 
     const post = new db.Post ({
         ...postObject,
-        //attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        attachment: `${req.protocol}://${req.get('host')}/images/${db.Post.attachment}`,
     });
     post.save()
         .then(() => res.status(201).json({ message : "Votre post a bien été créé" }))   
@@ -42,6 +42,7 @@ exports.modify = (req, res, next) => {
     .then((post) => {
         post.update({
             ...req.body, 
+            attachment: `${req.protocol}://${req.get('host')}/images/${db.Post.attachment}`,
         })
         .then(() => res.status(200).json({ message: "Votre post a bien été modifié !"}))
         .catch(error => res.status(400).json({ error }));
@@ -55,4 +56,21 @@ exports.modify = (req, res, next) => {
 };
 
 //à faire après 
-exports.delete = (req, res, next) => {};
+exports.delete = (req, res, next) => {
+    db.Post.findOne({
+        where: {id: req.body.id}
+    })
+    .then((post) => {
+        const filename = `./images/${post.imageURL}`;
+        fs.unlink(filename, () => {
+            db.Post.destroy({ where: { id: req.body.id }})
+            .then(() => res.status(200).json({ message: "Votre post a bien été supprimé" }))
+            .catch((error) => res.status(400).json({ error }))
+        })
+    })
+    .catch((error) => { 
+        res.status(400).json({
+            error: error
+        });
+    });
+};

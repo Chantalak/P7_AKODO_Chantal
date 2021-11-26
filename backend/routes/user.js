@@ -17,7 +17,7 @@ router.post('/login', userCtrl.login);
 //récupérer profil 
 router.get('/profil', auth, userCtrl.profil);
 //modifier profil 
-router.put('/modify', auth, userCtrl.modify);
+router.put('/modify', auth, multer, userCtrl.modify);
 //supprimer profil
 router.delete('/delete', auth, multer, userCtrl.delete);
 

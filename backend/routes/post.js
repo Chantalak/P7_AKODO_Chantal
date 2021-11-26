@@ -14,7 +14,7 @@ router.get('/', auth, postCtrl.getAll);
 //créer un post
 router.post('/create', auth, multer, postCtrl.create);
 //modifier post
-router.put('/modify', auth, postCtrl.modify);
+router.put('/modify', auth, multer, postCtrl.modify);
 //supprimer post
 router.delete('/delete', auth, multer, postCtrl.delete);
 

@@ -25,6 +25,7 @@ app.use(express.urlencoded({extended: true}));
 const db = require("./models");
 db.sequelize.sync();
 
+//gestion dossier statique images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //enregistrement des routes 
