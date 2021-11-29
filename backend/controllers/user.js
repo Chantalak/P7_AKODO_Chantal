@@ -25,12 +25,12 @@ exports.signup = (req, res, next) => {
         }
         bcrypt.hash(password, 10) 
         .then(hash => {
+            const filename = `${req.body.imageURL}`;
             db.User.create ({
                 email: email,
                 name: name,
                 password: hash,
-                //stocker dans un dossier après
-                imageURL: `${req.protocol}://${req.get('host')}/images/${db.User.imageURL}`,
+                imageURL: filename,
                 isAdmin: 0,
             })
         });
@@ -110,9 +110,11 @@ exports.modify = (req, res, next) => {
         where: {id: req.body.id} 
     })
     .then((user) => {
+        const filename = `${req.body.imageURL}`;
         if(user) {
             user.update({
                 ...req.body,
+                imageURL: filename,
             })
             .then(() => res.status(200).json({ message: "Votre nom d'utilisateur a été modifié !"}))
             .catch(error => res.status(400).json({ error }));
