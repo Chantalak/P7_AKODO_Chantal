@@ -1,9 +1,9 @@
 <template>
     <div id="card">
 		<div>
-			<h1> {{ user.name }} </h1>
+			<h1> Username </h1>
 			<div class="image-crop">
-				<img id="avatar" :src="user.imageURL" />
+				<img id="avatar" src="" />
 			</div>
 			<div id="buttons">
 				<button> <i class="fas fa-user-cog"></i> </button>
@@ -19,7 +19,7 @@ import { mapState } from 'vuex'
 export default {
     name: 'UserProfil',
 	//moment ou vue est affichée 
-	mounted() {
+	mounted: function () {
 		console.log(this.$store.state.user);
 		if (this.$store.state.user.userId == -1) {
 			this.$router.push('/');
@@ -29,15 +29,9 @@ export default {
 	},
 	computed: {
 		...mapState({
-      		user: 'user',
-    	})
-  	},
-	methods: {
-		logout: function () {
-			this.$store.commit('logout');
-			this.$router.push('/');
-		}
-  	}
+		user: 'userInfos',
+		})
+	},
 }
 </script>
 

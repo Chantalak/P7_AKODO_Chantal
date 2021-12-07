@@ -1,16 +1,15 @@
 <template>
 <div class="card">
+    <img class="logo" src="../assets/logo.png" alt="logo Groupomania">
     <form class="form">
         <!--Rendu conditionnel login et signup grâce à v-if et v-else-->
-        <h1 v-if="mode == 'login'">Connexion</h1> 
-        <h1 v-else>Inscription</h1> 
         <!--Récupération des valeurs de nos input avec v-model-->
         <input v-model="email" type="email" placeholder="E-mail" required/>
         <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
         <input v-model="password" type="password" placeholder="Mot de passe" required/>
         
-        <button v-if="mode == 'login'" v-on:click="login()"> Connexion </button>
-        <button v-else v-on:click="signup()"> Créer un compte </button>
+        <button v-if="mode == 'login'" @click="login()"> Connexion </button>
+        <button v-else @click="signup()"> Créer un compte </button>
 
         <p v-if="mode == 'login'" class="message" > Pas encore de compte? <span v-on:click="switchToSignup()"> Créer un compte </span></p>
         <p v-else class="message"> Déjà un compte? <span v-on:click="switchToLogin()"> Connectez-vous </span></p>
@@ -22,7 +21,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'LogUser',
+    name: 'Login',
     data() {
         return {
             mode: 'login',
@@ -31,17 +30,11 @@ export default {
             password: '',
         }
     },
-    mounted: function () {
-        if (this.$store.state.user.userId != -1) {
-            this.$router.push('/profile');
-            return ;
-        }
-    },
     computed: {
         ...mapState(['status'])
     },
     methods: {
-        //méthodes pour gérer l'affichage du mode login et signup
+        //méthodes pour gérer l'affichage mode login et signup
         switchToSignup() {
             this.mode = 'create';
         },
@@ -55,13 +48,14 @@ export default {
                 password: this.password,
             })
             .then(() => {
-              self.$router.push('/profil');
+                self.$router.push('profil');
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
             })
         },
         signup() {
+            const self = this;
             this.$store.dispatch('signup', {
                 email: this.email,
                 name: this.name,
@@ -69,10 +63,10 @@ export default {
             })
             .then(() => {
                 //permet connexion juste après création compte user
-                this.login()
+                self.login()
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
             })
         }
     }
@@ -81,12 +75,17 @@ export default {
 
 <style scoped>
     .card {
+        display: flex;
+        align-items: center;
         width: 360px;
-        padding: 2% 0 0;
+        padding: 3% 0 0;
         margin: auto;
+        border: none;
     }
     .logo {
-        width: 50%;
+        display: flex;
+        width: 70%;
+        margin-bottom: 5%;
     }
     .form {
         position: relative;

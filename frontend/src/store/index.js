@@ -3,9 +3,21 @@ import Vuex from "vuex";
 
 const axios = require('axios');
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api',
-  Credentials: true,
+  baseURL: 'http://localhost:3000/api/',
+  withCredentials: false,
 });
+
+// Add a request interceptor
+instance.interceptors.request.use((config) => {
+  let token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config;
+}, (error) => {
+  // Do something with request error
+  return Promise.reject(error);
+})
 
 Vue.use(Vuex);
 
@@ -15,83 +27,59 @@ export default new Vuex.Store({
     status: '',
     user: {
       userId: -1,
-      userAdmin: '',
+      isAdmin: '',
       token: '',
     },
-    data: {},
-    posts: [],
-    post: {},
+    userInfos: {},
+  },
+  getters: {
+    token: (state) => !!state.user.token,
   },
   mutations: {
     SET_STATUS(state, status) {
       state.status = status;
     },
     LOG_USER(state, user) { 
-      instance.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
       window.localStorage.user = JSON.stringify(user);
       state.user = user;
+      state.user.token = user.token;
     },
-    USER_DATA(state, data) {
-      state.data = data;
+    LOG_DATA(state, userInfos) {
+      state.userInfos = userInfos;
     },
-    ALL_POSTS(state, posts){
-      state.posts = posts;
-    },
-    ONE_POST(state, post) {
-      state.post = post;
-    }
   },
   actions: {
-    login({commit}, user) {
+    login({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/user/login', user)
+      instance.post('/users/login', userDatas)
       .then((response) => {
         commit('SET_STATUS', '');
-        commit('LOG_USER', response.data.data);
+        localStorage.setItem('token', response.data.token);
+        commit('LOG_USER', response.data);
+        console.log(response);
       })
-      .catch(() => {
-        commit('SET_STATUS', 'error')
+      .catch((error) => {
+        commit('SET_STATUS', 'error');
+        console.log(error);
       })
     },
     //commit permet d'éxécuter la mutation de quand on a créé le compte
-    signup({commit}, user) {
+    signup({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/user/signup', user)
+      instance.post('/users/signup', userDatas)
       .then((response) => {
-        commit('SET_STATUS', 'create');
+        commit('SET_STATUS', 'created');
         console.log(response);
       })
       .catch(() => {
         commit('SET_STATUS', 'error');
       })
     },
-    profil({commit}, credentials) {
+    profil({commit}) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/user/profil', credentials)
+      instance.get('/users/profil')
       .then((response) => {
-        commit( 'USER_DATA', response.data.data);
-        console.log(response)
-      })
-      .catch(() => {
-        commit('SET_STATUS', 'error');
-      })
-    },
-    getAll({commit}) {
-      commit('SET_STATUS', 'loading'),
-      instance.get('/post/')
-      .then((response) => {
-        commit( 'ALL_POSTS', response.data.data);
-        console.log(response)
-      })
-      .catch(() => {
-        commit('SET_STATUS', 'error');
-      })
-    },
-    create({commit}, credentials) {
-      commit('SET_STATUS', 'loading'),
-      instance.post('/post/create', credentials)
-      .then((response) => {
-        commit('ONE_POST', response.data);
+        commit('userInfos', response.data);
         console.log(response)
       })
       .catch(() => {
