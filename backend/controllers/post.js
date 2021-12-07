@@ -6,8 +6,8 @@ exports.getAll = (req, res, next) => {
         order: [['createdAt', 'DESC']],
         include: [{ model: db.Comment }]
     })
-    .then((post) => {
-        res.status(200).json({ post });
+    .then((posts) => {
+        res.status(200).json({ posts });
     })
     .catch((error) => {
         res.status(400).json({ error: error })

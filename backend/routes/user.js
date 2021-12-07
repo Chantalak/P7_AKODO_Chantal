@@ -8,14 +8,17 @@ const userCtrl = require('../controllers/user');
 //middleware 
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+//Middleware de vérification 
+const emailVerification = require('../middleware/email-regex');
+const passwordVerification = require('../middleware/password-regex');
 
 //authentification
-router.post('/signup', multer, userCtrl.signup);
+router.post('/signup', emailVerification, passwordVerification, multer, userCtrl.signup);
 router.post('/login', userCtrl.login);
 
 //gestion utilisateurs
 //récupérer profil 
-router.get('/profil', auth, userCtrl.profil);
+router.get('/profil', userCtrl.profil);
 //modifier profil 
 router.put('/modify', auth, multer, userCtrl.modify);
 //supprimer profil

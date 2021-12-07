@@ -29,8 +29,8 @@ db.sequelize.sync();
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //enregistrement des routes 
-app.use('/api/user', userRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/comment', commentRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 module.exports = app;
