@@ -1,28 +1,13 @@
 <template>
     <div class="posts">
-        <div class="box" >
+        <h1>Articles publiés sur le site</h1>
+        <button @click="gotopost()">Créer votre article</button>
+        <div class="box" v-for="post in posts" :key="post.id">
             <div class="container mt-5">
                 <div class="d-flex justify-content-center row">
-                    <div class="col-md-8">
-                        <div class="d-flex flex-column comment-section">
-                            <div class="bg-white p-2">
-                                <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40">
-                                    <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">test {{ }}</span><span class="date text-black-50">Publié le - {{  }}</span></div>
-                                </div>
-                                <div class="mt-2">
-                                    <p classs="comment-text">{{ }}</p>
-                                </div>
-                            </div>
-                            <div class="bg-white">
-                                <div class="d-flex flex-row fs-12">
-                                    <div class="like p-2 cursor"><i class="far fa-heart"></i><span class="ml-1">{{ }}</span></div>
-                                </div>
-                            </div>
-                            <div class="bg-light p-2">
-                                <div class="d-flex flex-row align-items-start"><textarea class="form-control ml-1 shadow-none textarea"></textarea></div>
-                                <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button">Poster</button></div>
-                            </div>
-                        </div>
+                    <div class="col-md-8"> 
+                        <h2 class="card-title"> {{ post.title }} </h2>
+                        <p class="card-content"> {{ post.content }} </p>
                     </div>
                 </div>
             </div>
@@ -30,39 +15,35 @@
     </div>
 </template>
 
+<script>
+import { mapState } from 'vuex'
 
+export default {
+    name: 'Allposts',
+	//moment ou vue est affichée 
+	mounted() {
+		this.$store.dispatch('getAll')
+	},
+	computed: {
+		...mapState([ 'posts', 'currentUser'])
+  	},
+    methods: {
+        gotopost(){
+            this.$router.push('post');
+        }       
+    },
+}
+</script>
 
 <style scoped>
-.date {
-    font-size: 11px
-}
-
-.comment-text {
-    text-align: left;
-    font-size: 12px
-}
-
-.fs-12 {
-    font-size: 12px
-}
-
-.shadow-none {
-    box-shadow: none
-}
-
-.name {
-    color: #007bff
-}
-
-.cursor:hover {
-    color: blue
-}
-
-.cursor {
-    cursor: pointer
-}
-
-.textarea {
-    resize: none
-}
+    .col-md-8 {
+        background-color: rgb(241, 232, 232);
+    }
+    h2 {
+        color: #fd2d01;
+    }
+    img {
+      width: 200px;
+      margin: 0 0 2rem;
+    }
 </style>

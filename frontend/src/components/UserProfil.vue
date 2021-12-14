@@ -1,15 +1,10 @@
 <template>
     <div id="card">
-		<div>
-			<h1> Username </h1>
-			<div class="image-crop">
-				<img id="avatar" src="" />
-			</div>
-			<div id="buttons">
-				<button> <i class="fas fa-user-cog"></i> </button>
-				<button> <i class="fas fa-user-times"></i> </button>
-			</div>
+		<h1> {{ currentUser.name }} </h1>
+		<div id="buttons">
+			<button type="button" class="btn btn-danger" v-on:click="deleteUser()"> <i class="fas fa-user-times"></i> </button>
 		</div>
+
 	</div>
 </template>
 
@@ -17,21 +12,39 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'UserProfil',
-	//moment ou vue est affichée 
-	mounted: function () {
-		console.log(this.$store.state.user);
-		if (this.$store.state.user.userId == -1) {
+	name: 'UserProfil',
+	data(){
+        return {
+            id: this.$store.state.currentUser.id,
+        }
+    },
+	mounted() {
+		console.log(this.$store.state.currentUser);
+		if (this.$store.state.currentUser.id == -1) {
 			this.$router.push('/');
 			return ;
 		}
 		this.$store.dispatch('profil');
+		
 	},
 	computed: {
-		...mapState({
-		user: 'userInfos',
-		})
+		...mapState(['currentUser', 'user'])
 	},
+	methods: {
+		deleteUser() {
+			this.$store.dispatch('deleteUser', {
+                id: this.id,
+            })
+            .then(() => {
+				//localStorage.clear();
+				//location.replace(location.origin);
+				alert("Cliquez sur ok et l'utilisateur sera supprimé");
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+		}
+	}
 }
 </script>
 
@@ -41,16 +54,15 @@ export default {
 		margin: 10vh auto;
 		border-radius: 25px;
 		padding-bottom: 1px;
-		box-shadow: 2px 2px 5px #4069E2;
-		background-color: #f2f2f2;
+		box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 	}
 
 	h1 {
 		text-align: center;
 		width: 100%;
-		background-color: #E6EBEE;
+		background-color: #f2f2f2;
 		border-radius: 25px 25px 0 0;
-		color: #393B45;
+		color: #fd2d01;
 		padding: 30px 0;
 		font-weight: 800;
 		margin: 0;
@@ -92,7 +104,7 @@ export default {
 	#buttons {
 		display: flex;
 		margin: 0 auto;
-		justify-content: space-between;
+		justify-content: center;
 		width: 280px;
 	}
 
@@ -107,8 +119,12 @@ export default {
 		font-size: 20px;
 		letter-spacing: 0.2px;
 		font-weight: 500;
-		background-color: #4069E2;
+		background-color: #ffd7d7;
 		color: #E6EBEE;
+	}
+
+	button i {
+		color: #ffffff;
 	}
 
 	button:hover {

@@ -1,32 +1,56 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link to="/profil"> <i class="fas fa-user-circle"></i> Profil </router-link> |
-            <router-link to="/feed"> <i class="fas fa-search"></i> Feed </router-link> |
-            <router-link to="/"> <i class="fas fa-sign-out-alt"></i> Déconnexion </router-link> 
-        </div>
+    <header>
+        <nav class="nav--bar">
+            <div class="logo">
+                <img/>
+            </div>
+            <ul class="menu">
+                <li class="item">
+                    <router-link to="/profil"> <i class="fas fa-user-circle"></i> Profil </router-link>
+                </li>
+                <li class="item">
+                    <router-link to="/feed"> <i class="fas fa-search"></i> Feed </router-link>
+                </li>
+                <li class="item">
+                    <button type="button" class="btn btn-danger" @click="disconnect">Déconnexion</button>
+                </li>
+            </ul>
+        </nav>
         <router-view />
-    </div>
+    </header>
+
 </template>
 
 <script>
+
 export default {
     name: 'Navbar',
+    methods: {
+        disconnect() {
+            localStorage.clear();
+            location.replace(location.origin);
+        }
+    }
 }
 </script>
 
-<style lang="scss">
-#nav {
+<style lang="scss">   
+.menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    list-style: none;
 
-    padding: 30px;
-    
+    .item {
+        margin-left: 22%;
+    }
+
     a {
         font-weight: bold;
         color: #fd2d01;
-        text-decoration: none;
 
         &.router-link-exact-active {
-        color: #ffd7d7;
+            color: #ffd7d7;
         }
     }
 }

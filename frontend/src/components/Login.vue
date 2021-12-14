@@ -1,15 +1,15 @@
 <template>
 <div class="card">
     <img class="logo" src="../assets/logo.png" alt="logo Groupomania">
-    <form class="form">
+    <form class="form" @submit.prevent="submit">
         <!--Rendu conditionnel login et signup grâce à v-if et v-else-->
         <!--Récupération des valeurs de nos input avec v-model-->
         <input v-model="email" type="email" placeholder="E-mail" required/>
         <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
-        <input v-model="password" type="password" placeholder="Mot de passe" required/>
+        <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
         
-        <button v-if="mode == 'login'" @click="login()"> Connexion </button>
-        <button v-else @click="signup()"> Créer un compte </button>
+        <button type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
+        <button type="submit" v-else @click="signup()"> Créer un compte </button>
 
         <p v-if="mode == 'login'" class="message" > Pas encore de compte? <span v-on:click="switchToSignup()"> Créer un compte </span></p>
         <p v-else class="message"> Déjà un compte? <span v-on:click="switchToLogin()"> Connectez-vous </span></p>
@@ -55,7 +55,6 @@ export default {
             })
         },
         signup() {
-            const self = this;
             this.$store.dispatch('signup', {
                 email: this.email,
                 name: this.name,
@@ -63,7 +62,7 @@ export default {
             })
             .then(() => {
                 //permet connexion juste après création compte user
-                self.login()
+                this.mode = 'login';
             })
             .catch((error) => {
                 console.log(error);
