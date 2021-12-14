@@ -7,7 +7,6 @@ const path = require('path');
 //eregistrements routeur
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
-const commentRoutes = require('./routes/comment');
 
 //middleware général appliquer à toutes les requetes envoyées serveurs
 app.use((req, res, next) => {
@@ -31,6 +30,5 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 //enregistrement des routes 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
-app.use('/api/comments', commentRoutes);
 
 module.exports = app;

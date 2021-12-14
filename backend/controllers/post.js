@@ -4,10 +4,9 @@ const fs = require('fs');
 exports.getAll = (req, res, next) => {
     db.Post.findAll({
         order: [['createdAt', 'DESC']],
-        include: [{ model: db.Comment }]
     })
     .then((posts) => {
-        res.status(200).json({ posts });
+        res.status(200).json(posts);
     })
     .catch((error) => {
         res.status(400).json({ error: error })

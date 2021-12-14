@@ -16,13 +16,12 @@ const passwordVerification = require('../middleware/password-regex');
 router.post('/signup', emailVerification, passwordVerification, multer, userCtrl.signup);
 router.post('/login', userCtrl.login);
 
-//gestion utilisateurs
+//Renvoie un tableau de tous les utilisateurs de la BDD
+router.get('/', userCtrl.getAll);
 //récupérer profil 
-router.get('/profil', userCtrl.profil);
-//modifier profil 
-router.put('/modify', auth, multer, userCtrl.modify);
+router.get('/profil', auth, userCtrl.profil);
 //supprimer profil
-router.delete('/delete', auth, multer, userCtrl.delete);
+router.delete('/delete', auth, multer, userCtrl.deleteUser);
 
 //exporte routeur
 module.exports = router;

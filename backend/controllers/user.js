@@ -86,16 +86,12 @@ exports.login = (req, res, next) => {
             .catch(error => res.status(500).json({ error }));
         })
     .catch(error => res.status(500).json({ error }));
-
 };
 
-exports.profil = (req, res, next) => {
-    db.User.findOne({
-        where: {id: req.body.id} 
-    })
-    .then((user) => {
-        console.log('user');
-        res.status(200).json({user});
+exports.getAll = (req, res, next) => {
+    db.User.findAll()
+    .then((users) => {
+        res.status(200).json(users);
     })
     .catch((error) => { 
         res.status(400).json({
@@ -104,21 +100,16 @@ exports.profil = (req, res, next) => {
     });
 };
 
-exports.modify = (req, res, next) => {
-    db.User.findOne({ 
-        attributes: ['id', 'name'], 
-        where: {id: req.body.id} 
+exports.profil = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    let id = decodedToken.userId;
+    db.User.findOne({
+        where: {id: id} 
     })
     .then((user) => {
-        const filename = `${req.body.imageURL}`;
-        if(user) {
-            user.update({
-                ...req.body,
-                imageURL: filename,
-            })
-            .then(() => res.status(200).json({ message: "Votre nom d'utilisateur a été modifié !"}))
-            .catch(error => res.status(400).json({ error }));
-        }
+        console.log('user');
+        res.status(200).json(user);
     })
     .catch((error) => { 
         res.status(400).json({
@@ -128,15 +119,14 @@ exports.modify = (req, res, next) => {
 };
 
 //à faire après parce image à supprimer avec multer
-exports.delete = (req, res, next) => {
+exports.deleteUser = (req, res, next) => {
     db.User.findOne({
         where: {id: req.body.id}
     })
     .then((user) => {
         const filename = `./images/${user.imageURL}`;
         fs.unlink(filename, () => {
-            db.Comment.destroy({ where: { UserId: req.body.id }})
-            db.Post.destroy({ where: { UserId: req.body.id }})
+            db.Post.destroy({ where: {userId: req.body.id}})
             db.User.destroy({ where: {id: req.body.id}})
             .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
             .catch((error) => res.status(400).json({ error }))
