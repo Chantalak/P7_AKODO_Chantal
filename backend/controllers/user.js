@@ -11,7 +11,7 @@ exports.signup = (req, res, next) => {
     const password = req.body.password;
 
     //vérification que tous les champs obligatoires sont remplis
-    if(email === null || name == null || password === null ) {
+    if(email === null || name === null || password === null ) {
         return res.status(400).json({ error: "Certains champs ne sont pas bien remplis" });
     }
 
@@ -120,14 +120,17 @@ exports.profil = (req, res, next) => {
 
 //à faire après parce image à supprimer avec multer
 exports.deleteUser = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    let id = decodedToken.userId;
     db.User.findOne({
-        where: {id: req.body.id}
+        where: {id: id}
     })
     .then((user) => {
         const filename = `./images/${user.imageURL}`;
         fs.unlink(filename, () => {
-            db.Post.destroy({ where: {userId: req.body.id}})
-            db.User.destroy({ where: {id: req.body.id}})
+            db.Post.destroy({ where: {userId: id}})
+            db.User.destroy({ where: {id: id}})
             .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
             .catch((error) => res.status(400).json({ error }))
         })

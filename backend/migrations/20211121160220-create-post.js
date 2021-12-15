@@ -3,7 +3,6 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Posts', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
@@ -18,15 +17,16 @@ module.exports = {
         }
       },
       title: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       content: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       attachment: {
         allowNull: true,
+        defaultValue: null,
         type: Sequelize.STRING
       },
       createdAt: {

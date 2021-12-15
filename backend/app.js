@@ -7,6 +7,7 @@ const path = require('path');
 //eregistrements routeur
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 //middleware général appliquer à toutes les requetes envoyées serveurs
 app.use((req, res, next) => {
@@ -22,7 +23,12 @@ app.use(express.urlencoded({extended: true}));
 
 //models dans la base de données
 const db = require("./models");
-db.sequelize.sync();
+
+db.sequelize.sync()
+.then((res) => {
+    server.listen(port);
+})
+.catch((error) => console.log(error));
 
 //gestion dossier statique images
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -30,5 +36,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 //enregistrement des routes 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 module.exports = app;

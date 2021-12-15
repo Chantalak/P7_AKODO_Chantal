@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId;
         const isAdmin = decodedToken.isAdmin;
         //vérifie si userId correspond à celui du token si ok next
-        if (req.body.userId && req.body.userId !== userId) {
+        if (req.body.userId && req.body.user.id !== userId) {
             throw 'Invalid user ID';
         } else if (req.body.isAdmin && req.body.isAdmin !== isAdmin) {
             throw 'Not Admin';
