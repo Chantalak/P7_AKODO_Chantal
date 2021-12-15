@@ -37,6 +37,7 @@ export default new Vuex.Store({
     currentUser: {},  
     users: [],
     posts: [],
+    article: {},
     post: {},
   },
   getters: {
@@ -57,10 +58,14 @@ export default new Vuex.Store({
     ALL_POSTS(state, posts){
       state.posts = posts;
     },
-    POST_ARTICLE(state, post) {
+    POST_ARTICLE(state, article) {
+      window.localStorage.article = JSON.stringify(article);
+      state.article = article;
+    },
+    GET_POST(state, post){
       window.localStorage.post = JSON.stringify(post);
       state.post = post;
-    }
+    },
   },
   actions: {
     //users
@@ -106,7 +111,7 @@ export default new Vuex.Store({
       commit('SET_STATUS', 'loading'),
 			instance.delete('/users/delete')
 			.then((response)=> {
-        this.currentUser = response.data;
+        commit('SET_STATUS', '');
 				console.log(response);
 			})
 			.catch(() => { 
@@ -114,9 +119,9 @@ export default new Vuex.Store({
 			})
 		},
     //posts
-    getAll({commit}) {
+    getAll({commit} , postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/posts/')
+      instance.get('/posts/', postDatas)
       .then((response) => {
         commit( 'ALL_POSTS', response.data);
         console.log(response)
@@ -125,12 +130,12 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    create({commit}) {
+    create({commit}, postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/posts/create')
+      instance.post('/posts/create', postDatas)
       .then((response) => {
         commit('SET_STATUS', '');
-        commit( 'POST_ARTICLE', response);
+        commit( 'POST_ARTICLE', response.data);
         console.log(response)
       })
       .catch(() => {

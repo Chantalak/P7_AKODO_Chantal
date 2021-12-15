@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div class="addpost">
     <Post/>
   </div>
 </template>
@@ -9,7 +9,7 @@
 import Post from '../components/Post.vue';
 
 export default {
-  name: "Home",
+  name: "AddPost",
   components: {
     Post,
   },

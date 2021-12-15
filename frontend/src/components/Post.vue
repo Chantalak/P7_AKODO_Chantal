@@ -1,13 +1,13 @@
 <template>
   <section>
-    <form class="form" @submit.prevent="submit" :key="userId">
+    <form class="form" @submit.prevent="submit">
         <div class="container mt-5">
             <div class="d-flex justify-content-center row">
                 <div class="form col-md-8">
                     <h1>Créer votre article</h1>
                     <input v-model="title" name="title" type="text" placeholder="Titre" required />
                     <textarea v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
-                    <input name="attachment" class="form-control" type="file" id="formFile" /> 
+                    <input class="form-control" type="file" id="formFile" /> 
                     <div>
                         <button type="submit" @click="create()"> Publier </button>
                         <button @click="cancel()"> Annuler </button> 
@@ -29,23 +29,21 @@ export default {
             title: '',
             content: '',
             attachment: '',
-            userId: this.$store.state.user.userId,
         }
     },
     computed: {
-		...mapState([ 'user', 'currentUser'])
+		...mapState([ 'status', 'user', 'currentUser'])
   	},
     methods: {
         create() {
             const self = this;
             this.$store.dispatch('create', {
-                userId: this.userId,
                 title: this.title,
                 content: this.content,
                 attachment: this.attachment,
             })
             .then(() => {
-                self.$router.push('/feed');
+                console.log(self)
             })
             .catch((error) => {
                 console.log(error)

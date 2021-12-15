@@ -11,7 +11,7 @@ import Navbar from '../components/Navbar.vue';
 import Allposts from '../components/Allposts.vue';
 
 export default {
-  name: "Home",
+  name: "Feed",
   components: {
     Navbar,
     Allposts,

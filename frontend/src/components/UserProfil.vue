@@ -13,11 +13,6 @@ import { mapState } from 'vuex'
 
 export default {
 	name: 'UserProfil',
-	data(){
-        return {
-            id: this.$store.state.currentUser.id,
-        }
-    },
 	mounted() {
 		console.log(this.$store.state.currentUser);
 		if (this.$store.state.currentUser.id == -1) {
@@ -32,12 +27,11 @@ export default {
 	},
 	methods: {
 		deleteUser() {
-			this.$store.dispatch('deleteUser', {
-                id: this.id,
-            })
+			this.$store.dispatch('deleteUser')
             .then(() => {
-				//localStorage.clear();
-				//location.replace(location.origin);
+				this.$store.replaceState({})
+				localStorage.clear();
+				location.replace(location.origin);
 				alert("Cliquez sur ok et l'utilisateur sera supprimé");
             })
             .catch((error) => {
