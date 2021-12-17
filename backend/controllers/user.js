@@ -9,6 +9,7 @@ exports.signup = (req, res, next) => {
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
+    const isAdmin = req.body.isAdmin;
 
     //vérification que tous les champs obligatoires sont remplis
     if(email === null || name === null || password === null ) {
@@ -25,13 +26,12 @@ exports.signup = (req, res, next) => {
         }
         bcrypt.hash(password, 10) 
         .then(hash => {
-            const filename = `${req.body.imageURL}`;
             db.User.create ({
                 email: email,
                 name: name,
                 password: hash,
-                imageURL: filename,
-                isAdmin: 0,
+                imageURL: undefined,
+                isAdmin: isAdmin,
             })
         });
         user.save()

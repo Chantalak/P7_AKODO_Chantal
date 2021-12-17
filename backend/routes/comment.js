@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 const commentCtrl = require('../controllers/comment');
 
 //Routes
+router.get('/', auth, commentCtrl.getAll);
 router.post('/create', auth, commentCtrl.create);
 //modifier post
 router.put('/modify', auth, commentCtrl.modify);

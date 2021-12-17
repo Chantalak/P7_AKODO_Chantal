@@ -11,8 +11,18 @@ module.exports = {
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        //association avec user
         references: {
           model: 'Users',
+          key: 'id'
+        }
+      },
+      postId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        //association avec user
+        references: {
+          model: 'Posts',
           key: 'id'
         }
       },
@@ -22,11 +32,11 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       }
     });
   },

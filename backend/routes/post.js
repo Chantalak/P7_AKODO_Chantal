@@ -12,6 +12,9 @@ const multer = require('../middleware/multer-config')
 //tableau de tous les posts de la BDD
 router.get('/', auth, postCtrl.getAll);
 //créer un post
+//tableau de tous les posts de la BDD
+router.get('/post', auth, postCtrl.getOnePost);
+//créer un post
 router.post('/create', auth, multer, postCtrl.create);
 //modifier post
 router.put('/modify', auth, multer, postCtrl.modify);
