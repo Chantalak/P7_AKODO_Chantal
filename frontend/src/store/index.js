@@ -34,11 +34,13 @@ export default new Vuex.Store({
   state: {
     status: '',
     user: {}, 
-    currentUser: {},  
+    currentUser: {}, 
     users: [],
     posts: [],
-    article: {},
     post: {},
+    article: {},
+    comments: [],
+    comment: {}
   },
   getters: {
     token: (state) => !!state.user.token,
@@ -65,6 +67,12 @@ export default new Vuex.Store({
     GET_POST(state, post){
       window.localStorage.post = JSON.stringify(post);
       state.post = post;
+    },
+    ALL_COMMENTS(state, comments){
+      state.comments = comments;
+    },
+    POST_COMMENT(state, comment) {
+      state.comment = comment;
     },
   },
   actions: {
@@ -142,6 +150,41 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
+    //comments 
+    getAllComments({commit}, commentDatas) {
+      commit('SET_STATUS', 'loading'),
+      instance.get('/comments/', commentDatas)
+      .then((response) => {
+        commit( 'ALL_COMMENTS', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    createComment({commit}, commentDatas) {
+      commit('SET_STATUS', 'loading'),
+      instance.post('/commments/create', commentDatas)
+      .then((response) => {
+        commit('SET_STATUS', '');
+        commit( 'POST_COMMENT', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    deleteComment({commit}) {
+      commit('SET_STATUS', 'loading'),
+			instance.delete('/comments/delete')
+			.then((response)=> {
+        commit('SET_STATUS', '');
+				console.log(response);
+			})
+			.catch(() => { 
+				commit('SET_STATUS', 'error');
+			})
+		},
   },
   plugins: [createPersistedState()]
 });

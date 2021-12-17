@@ -1,11 +1,24 @@
 <template>
-    <div id="card">
-		<h1> {{ currentUser.name }} </h1>
-		<div id="buttons">
-			<button type="button" class="btn btn-danger" v-on:click="deleteUser()"> <i class="fas fa-user-times"></i> </button>
+	<main class="main">
+		<div class="card">
+			<h1 class="title"> Profil </h1>
+			<div>
+				<div class="image-crop"> 
+					<img class="avatar" src="../assets/profil.jpg" alt="photo de profil utilisateur" />
+				</div>
+			</div>
+			<div class="info">
+				<span> Nom : {{ currentUser.name }} </span>
+				<span><a v-bind:href="`mailto:${currentUser.email}`">Envoyer un mail</a></span>
+			</div>
+			<div v-if="user.isAdmin == true">
+				<div></div>
+			</div>
+			<div class="delete">
+				<button aria-label="Suppression compte" class="btn btn-danger" type="submit" v-on:click="deleteUser()"> <i class="fas fa-user-times"></i> </button>
+			</div>
 		</div>
-
-	</div>
+	</main>
 </template>
 
 <script>
@@ -20,7 +33,6 @@ export default {
 			return ;
 		}
 		this.$store.dispatch('profil');
-		
 	},
 	computed: {
 		...mapState(['currentUser', 'user'])
@@ -43,7 +55,7 @@ export default {
 </script>
 
 <style scoped>
-	#card {
+	.card {
 		width: 350px;
 		margin: 10vh auto;
 		border-radius: 25px;
@@ -51,7 +63,7 @@ export default {
 		box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 	}
 
-	h1 {
+	.title {
 		text-align: center;
 		width: 100%;
 		background-color: #f2f2f2;
@@ -73,29 +85,35 @@ export default {
 		overflow: hidden;
 		border-radius: 50%;
 		box-shadow: 1px 1px 5px #4069E2;
+		
 	}
 
-	#avatar {
+	.avatar {
 		display: inline;
 		height: 230px;
 		width: auto;
-		margin-left: -34px;
+		margin-left: -40%;
 	}
 
-	#bio {
-		display: block;
+	.info {
+		display: flex;
+		flex-direction: column;
 		margin: 30px auto;
 		width: 280px;
 		height: auto;
 	}
 
-	#bio p {
-		font-weight: lighter;
-		font-size: 15px;
+	.info span {
+		font-weight: bold;
+		font-size: 20px;
 		text-align: center;
 	}
 
-	#buttons {
+	.info a {
+		color: #0095f6;
+	}
+
+	.delete {
 		display: flex;
 		margin: 0 auto;
 		justify-content: center;
@@ -106,19 +124,15 @@ export default {
 		display: block;
 		position: relative;
 		padding: 10px 0;
-		width: 130px;
-		margin: 30px 0;
+		width: 150px;
+		margin: 10px 0;
 		border-radius: 25px;
 		border: none;
 		font-size: 20px;
 		letter-spacing: 0.2px;
 		font-weight: 500;
 		background-color: #ffd7d7;
-		color: #E6EBEE;
-	}
-
-	button i {
-		color: #ffffff;
+		color: #000000;
 	}
 
 	button:hover {

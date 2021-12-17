@@ -1,20 +1,29 @@
 <template>
-<div class="card">
-    <img class="logo" src="../assets/logo.png" alt="logo Groupomania">
-    <form class="form" @submit.prevent="submit">
-        <!--Rendu conditionnel login et signup grâce à v-if et v-else-->
-        <!--Récupération des valeurs de nos input avec v-model-->
-        <input v-model="email" type="email" placeholder="E-mail" required/>
-        <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
-        <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
-        
-        <button type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
-        <button type="submit" v-else @click="signup()"> Créer un compte </button>
+    <main class="main">
+        <div class="card">
+            <img class="logo" src="../assets/logo.png" alt="logo Groupomania" />
+            <form class="form" @submit.prevent="submit">
+                <!--Rendu conditionnel login et signup grâce à v-if et v-else-->
+                <!--Récupération des valeurs de nos input avec v-model-->
+                <h1 v-if="mode == 'login'">Se connecter</h1>
+                <h1  v-else>S'inscrire</h1>
+                
+                <input v-model="email" type="email" placeholder="E-mail" required/>
+                <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
+                <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
+                
+                <button aria-label="Connexion" type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
+                <button aria-label="Création de compte" type="submit" v-else @click="signup()"> Créer un compte </button>
 
-        <p v-if="mode == 'login'" class="message" > Pas encore de compte? <span v-on:click="switchToSignup()"> Créer un compte </span></p>
-        <p v-else class="message"> Déjà un compte? <span v-on:click="switchToLogin()"> Connectez-vous </span></p>
-    </form>
-</div>
+                <p v-if="mode == 'login'" class="message" >Pas encore de compte? 
+                    <span v-on:click="switchToSignup()"> Créer un compte </span>
+                </p>
+                <p v-else class="message"> Déjà un compte? 
+                    <span v-on:click="switchToLogin()"> Connectez-vous </span>
+                </p>
+            </form>
+        </div>
+    </main>
 </template>
 
 <script>
@@ -128,10 +137,10 @@ export default {
     .form .message {
         margin: 15px 0 0;
         color: #000000;
-        font-size: 12px;
+        font-size: 14px;
     }
     .form .message span {
-        color: #fd2d01;
+        color: #0095f6;
         text-decoration: none;
         cursor: pointer;
     }

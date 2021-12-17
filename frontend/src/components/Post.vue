@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <main class="main">
     <form class="form" @submit.prevent="submit">
         <div class="container mt-5">
             <div class="d-flex justify-content-center row">
@@ -7,7 +7,7 @@
                     <h1>Créer votre article</h1>
                     <input v-model="title" name="title" type="text" placeholder="Titre" required />
                     <textarea v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
-                    <input class="form-control" type="file" id="formFile" /> 
+                    <input type="file" @change="onFileSelected"/> 
                     <div>
                         <button type="submit" @click="create()"> Publier </button>
                         <button @click="cancel()"> Annuler </button> 
@@ -16,7 +16,7 @@
             </div>
         </div>
     </form>
-  </section>
+  </main>
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
         return {
             title: '',
             content: '',
-            attachment: '',
+            attachment: null,
         }
     },
     computed: {
@@ -36,11 +36,12 @@ export default {
   	},
     methods: {
         create() {
+            const fd = new FormData();
+            fd.append('image', this.attachment, this.attachment.name)
             const self = this;
-            this.$store.dispatch('create', {
+            this.$store.dispatch('create', fd, {
                 title: this.title,
                 content: this.content,
-                attachment: this.attachment,
             })
             .then(() => {
                 console.log(self)
@@ -51,6 +52,9 @@ export default {
         },
         cancel() {
             this.$router.push('feed');
+        },
+        onFileSelected(event) {
+            this.attachment = event.target.files[0]
         }
     }
 }
