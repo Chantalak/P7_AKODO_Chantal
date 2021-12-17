@@ -10,17 +10,18 @@
                             <div class="card col-md-8"> 
                                 <h2 class="card-title"> {{ post.title }} </h2>
                                 <p class="card-content"> {{ post.content }} </p>
-                                <p class="card-attachment"> {{ post.attachment }} </p>
+                                <img :src="post.attachment" alt="photo, image ou gif" />
                                 <div class="info">
                                     <p>{{ post.createdAt }}</p>
                                 </div>
-                                <div class="addComment__Title">Commentaires :</div>
-                                <div v-for="comment in comments" :key="comment.postId">
-                                    <p v-if="post.id == comment.postId">{{ comment.content }}
-                                        <span class="btn btn-danger" type="submit" v-on:click="deleteComment()"> <i class="fas fa-minus"></i></span>
-                                    </p>
+                                <div class="addComment__Title">Commentaires :
+                                    <div v-for="comment in comments" :key="comment.postId">
+                                        <p v-if="post.id == comment.postId">{{ comment.content }}
+                                            <span class="btn btn-danger" type="submit" v-on:click="deleteComment()"> Supprimer </span>
+                                        </p>
+                                    </div>
+                                    <Comments/>
                                 </div>
-                                <Comments/>
                             </div>
                         </div>
                     </div>
@@ -90,7 +91,9 @@ export default {
 		background-color: #ffd7d7;
 		color: #000000;
 	}
-
+    .addComment__Title{
+        background-color: #ffffff;;
+    }
 	button:hover {
 		transform: scale(1.03);
 		cursor: pointer;
