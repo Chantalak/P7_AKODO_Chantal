@@ -35,6 +35,16 @@ export default {
 <style lang="scss"> 
 .navbar{
     background: linear-gradient(45deg, #ea4f4c 0%, #6d0019 100%);
+    
+    @media (max-width:599px) {
+        justify-content: center;
+    }  
+
+    .navlogo {
+        @media (max-width:599px) {
+            display: none;
+        }
+    }
 }  
 .menu {
     display: flex;

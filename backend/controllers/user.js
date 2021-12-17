@@ -36,7 +36,7 @@ exports.signup = (req, res, next) => {
         });
         user.save()
         //message utilisateur est créé ne s'affiche pas
-            .then(() => res.status(201).json({ message: "L'Utilisateur est créé" }))
+            .then(() => res.status(201).json({ message: "L'Utilisateur est créé"}))
             .catch(error => res.status(400).json({ error }));
     })
     .catch((error) => { 
@@ -45,16 +45,13 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    //récupération paramètres envoyés dans la requête
     const email = req.body.email;
     const password = req.body.password;
 
-    //vérification que tous les champs sont remplis
     if(email === null || password === null ) {
         return res.status(400).json({ error: "Certains champs ne sont pas remplis" });
     }
 
-    //vérification si utilisateur existe déja dans la BDD
     db.User.findOne({
         where: { email: email }
     })
@@ -80,7 +77,8 @@ exports.login = (req, res, next) => {
                         },
                         'RANDOM_TOKEN_SECRET',
                         { expiresIn: '24h' }
-                    )
+                    ),
+                    user: {...user.dataValues } 
                 });
             })
             .catch(error => res.status(500).json({ error }));
@@ -108,7 +106,6 @@ exports.profil = (req, res, next) => {
         where: {id: id} 
     })
     .then((user) => {
-        console.log('user');
         res.status(200).json(user);
     })
     .catch((error) => { 
@@ -118,7 +115,6 @@ exports.profil = (req, res, next) => {
     });
 };
 
-//à faire après parce image à supprimer avec multer
 exports.deleteUser = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');

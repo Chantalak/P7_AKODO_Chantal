@@ -14,7 +14,6 @@ export default {
     name: 'Comment',
      data() {
         return {
-            postId: this.post.id,
             content: '',
         }
     },
@@ -25,7 +24,6 @@ export default {
        createComment() {
             const self = this;
             this.$store.dispatch('create', {
-                postId: this.postId,
                 content: this.content,
             })
             .then(() => {

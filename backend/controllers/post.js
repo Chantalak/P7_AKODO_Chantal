@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 const db = require("../models");
 const fs = require('fs');
 
+//importation cross site scripting
+const xss = require('xss')
+
 exports.getAll = (req, res) => {
     db.Post.findAll({
         order: [['createdAt', 'DESC']],
@@ -32,8 +35,8 @@ exports.create = (req, res) => {
     
     const file = req.file ? req.file.filename : null;
     const post = new db.Post ({
-        userId: id,
-        id: req.body.id,
+        userId: xss(id),
+        id: xss(req.body.id),
         ...postObject,
         attachment: file
     });

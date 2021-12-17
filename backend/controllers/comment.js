@@ -3,15 +3,14 @@ const jwt = require('jsonwebtoken');
 const db = require("../models");
 const fs = require('fs');
 
-// logique métier : lire tous les commentaires
+// logique métier
 exports.getAll = (req, res, next) => {
     db.Comment.findAll()
     .then(comments => {
-        console.log(comments);
         res.status(200).json( comments );
     })
     .catch(error => res.status(400).json({ error }));
-  };
+};
 
 exports.create = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];

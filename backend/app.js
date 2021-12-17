@@ -1,13 +1,23 @@
 //importation d'express création REST API application express
 const express = require('express');
-const app = express();
-//accéder path serveur
 const path = require('path');
+//sécurité du site
+const helmet = require('helmet');
+const rateLimit = require("./middleware/rateLimit");
 
-//eregistrements routeur
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
+
+const app = express();
+
+app.use(rateLimit);  //empêcher les attaques brutes (rateLimit)
+app.use(helmet()); //identifier les éléments protèger par helmet
+app.use(helmet.noSniff()); //empêcher le navigateur de contourner l'entête Content-Type
+app.use(helmet.hidePoweredBy()); //cacher le powered by Express dans chaque entête de requête
+app.use(helmet.ieNoOpen()); //empêcher IE d'éxécuter des téléchargements provenant de page potentiellement malveillante
+app.use(helmet.frameguard({ action: 'deny' })); //empêche le click jacking  
+app.use(helmet.xssFilter({})); //prévenir les attaques xss
 
 //middleware général appliquer à toutes les requetes envoyées serveurs
 app.use((req, res, next) => {
@@ -23,12 +33,7 @@ app.use(express.urlencoded({extended: true}));
 
 //models dans la base de données
 const db = require("./models");
-
-db.sequelize.sync()
-.then((res) => {
-    server.listen(port);
-})
-.catch((error) => console.log(error));
+db.sequelize.sync();
 
 //gestion dossier statique images
 app.use('/images', express.static(path.join(__dirname, 'images')));
