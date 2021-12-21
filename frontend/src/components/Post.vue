@@ -7,7 +7,7 @@
                     <h1>Créer votre article</h1>
                     <input v-model="title" name="title" type="text" placeholder="Titre" required />
                     <textarea v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
-                    <input type="file" @change="onFileSelected"/> 
+                    <input type="file"/> 
                     <div>
                         <button type="submit" @click="create()"> Publier </button>
                         <button @click="cancel()"> Annuler </button> 
@@ -28,20 +28,22 @@ export default {
         return {
             title: '',
             content: '',
-            attachment: null,
+            attachment: '',
         }
     },
     computed: {
-		...mapState([ 'status', 'user', 'currentUser'])
+		...mapState([ 'status', 'user', 'currentUser', 'post', 'posts' ])
   	},
     methods: {
         create() {
-            const fd = new FormData();
-            fd.append('image', this.attachment, this.attachment.name)
+            //const fd = new FormData();
+            //fd.append('image', this.attachment, this.attachment.name)
             const self = this;
-            this.$store.dispatch('create', fd, {
+            this.$store.dispatch('create', //fd, 
+            {
                 title: this.title,
                 content: this.content,
+                attachment: this.attchment,
             })
             .then(() => {
                 console.log(self)
@@ -53,9 +55,9 @@ export default {
         cancel() {
             this.$router.push('feed');
         },
-        onFileSelected(event) {
-            this.attachment = event.target.files[0]
-        }
+        //onFileSelected(event) {
+            //this.attachment = event.target.files[0]
+        //}
     }
 }
 </script>

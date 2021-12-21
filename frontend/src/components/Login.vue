@@ -57,7 +57,7 @@ export default {
                 password: this.password,
             })
             .then(() => {
-                self.$router.push('profil');
+                self.$router.push('/user');
             })
             .catch((error) => {
                 console.log(error);
@@ -70,7 +70,6 @@ export default {
                 password: this.password,
             })
             .then(() => {
-                //permet connexion juste après création compte user
                 this.mode = 'login';
             })
             .catch((error) => {

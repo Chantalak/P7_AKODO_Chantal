@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Profil from "../views/Profil.vue";
 import Feed from "../views/Feed.vue";
 import AddPost from "../views/AddPost.vue";
+import UserArticle from "../views/UserArticle.vue";
 
 Vue.use(VueRouter);
 
@@ -14,7 +15,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/profil",
+    path: "/user",
     name: "Profil",
     component: Profil,
   },
@@ -22,6 +23,11 @@ const routes = [
     path: "/feed",
     name: "Feed",
     component: Feed,
+  },
+  {
+    path: "/post",
+    name: "UserArticle",
+    component: UserArticle,
   },
   {
     path: "/post",

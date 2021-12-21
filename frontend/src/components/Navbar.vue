@@ -6,7 +6,7 @@
             </div>
             <ul class="menu">
                 <li class="item">
-                    <router-link to="/profil"> <i class="fas fa-user-circle"></i> Profil </router-link>
+                    <router-link to="/user"> <i class="fas fa-user-circle"></i> Profil </router-link>
                 </li>
                 <li class="item">
                     <router-link to="/feed"> <i class="far fa-newspaper"></i> Feed </router-link>

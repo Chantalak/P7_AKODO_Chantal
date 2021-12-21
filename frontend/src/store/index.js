@@ -12,7 +12,6 @@ instance.interceptors.request.use((config) => {
   }
   return config;
 }, (error) => {
-  // Do something with request error
   return Promise.reject(error);
 })
 
@@ -23,19 +22,20 @@ instance.interceptors.response.use((config) => {
   }
   return config;
 }, (error) => {
-  // Do something with request error
   return Promise.reject(error);
 })
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  //données dont dépendent les components
   state: {
     status: '',
-    user: {}, 
+    //AUTH
     currentUser: {}, 
+    //USER
     users: [],
+
+    user: {}, 
     posts: [],
     post: {},
     article: {},
@@ -43,20 +43,27 @@ export default new Vuex.Store({
     comment: {}
   },
   getters: {
-    token: (state) => !!state.user.token,
+    token: (state) => !!state.currentUser.token,
   },
   mutations: {
     SET_STATUS(state, status) {
       state.status = status;
     },
-    LOG_USER(state, user) { 
+    //AUTH
+    LOG_USER(state, currentUser) { 
+      window.localStorage.currentUser = JSON.stringify(currentUser);
+      state.currentUser = currentUser;
+    },
+    //USER
+    ALL_USERS(state, users){
+      state.users = users;
+    },
+    DATA_USER(state, user) {
       window.localStorage.user = JSON.stringify(user);
       state.user = user;
     },
-    DATA_USER(getters, currentUser) {
-      window.localStorage.currentUser = JSON.stringify(currentUser);
-      getters.currentUser = currentUser;
-    },
+
+   
     ALL_POSTS(state, posts){
       state.posts = posts;
     },
@@ -64,7 +71,7 @@ export default new Vuex.Store({
       window.localStorage.article = JSON.stringify(article);
       state.article = article;
     },
-    GET_POST(state, post){
+    DATA_POST(state, post){
       window.localStorage.post = JSON.stringify(post);
       state.post = post;
     },
@@ -76,11 +83,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    //users
-    //commit permet d'éxécuter la mutation de quand on a créé le compte
+    //AUTH
     signup({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/users/signup', userDatas)
+      instance.post('/auth/signup', userDatas)
       .then((response) => {
         commit('SET_STATUS', 'created');
         console.log(response);
@@ -91,7 +97,7 @@ export default new Vuex.Store({
     },
     login({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/users/login', userDatas)
+      instance.post('/auth/login', userDatas)
       .then((response) => {
         commit('SET_STATUS', '');
         localStorage.setItem('token', response.data.token);
@@ -103,11 +109,23 @@ export default new Vuex.Store({
         console.log(error);
       })
     },
-    profil({commit}) {
+    //USER
+    getAllUsers({commit} , userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/users/profil')
+      instance.get('/user/', userDatas)
       .then((response) => {
-        localStorage.setItem('currentUser', response.data);
+        commit( 'ALL_USERS', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    getOneUser({commit}) {
+      commit('SET_STATUS', 'loading'),
+      instance.get(`/user/${this.$router.params.id}`)
+      .then((response) => {
+        localStorage.setItem('user', response.data);
         commit( 'DATA_USER', response.data);
         console.log(response)
       })
@@ -115,6 +133,8 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
+
+
     deleteUser({commit}) {
       commit('SET_STATUS', 'loading'),
 			instance.delete('/users/delete')
@@ -132,6 +152,18 @@ export default new Vuex.Store({
       instance.get('/posts/', postDatas)
       .then((response) => {
         commit( 'ALL_POSTS', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    getOnePost({commit}) {
+      commit('SET_STATUS', 'loading'),
+      instance.get('/posts/post')
+      .then((response) => {
+        localStorage.setItem('post', response.data);
+        commit( ' DATA_POST', response.data);
         console.log(response)
       })
       .catch(() => {

@@ -8,8 +8,8 @@
 				</div>
 			</div>
 			<div class="info">
-				<span> Nom : {{ currentUser.name }} </span>
-				<span><a v-bind:href="`mailto:${currentUser.email}`">Envoyer un mail</a></span>
+				<span> Nom : {{ user.name }} </span>
+				<span><a v-bind:href="`mailto:${ user.email }`">Envoyer un mail</a></span>
 			</div>
 			<div v-if="user.isAdmin == true">
 				<div></div>
@@ -27,12 +27,8 @@ import { mapState } from 'vuex'
 export default {
 	name: 'UserProfil',
 	mounted() {
-		console.log(this.$store.state.currentUser);
-		if (this.$store.state.currentUser.id == -1) {
-			this.$router.push('/');
-			return ;
-		}
-		this.$store.dispatch('profil');
+		this.$store.dispatch('getAllUsers');
+		this.$store.dispatch('getOneUser');
 	},
 	computed: {
 		...mapState(['currentUser', 'user'])
