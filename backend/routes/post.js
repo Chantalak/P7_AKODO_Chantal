@@ -10,16 +10,15 @@ const auth = require("../middleware/auth");
 const multer = require('../middleware/multer-config')
 
 //tableau de tous les posts de la BDD
-router.get('/', auth, postCtrl.getAll);
+router.get('/', auth, postCtrl.getAllPosts);
 //créer un post
-//tableau de tous les posts de la BDD
-router.get('/post', auth, postCtrl.getOnePost);
+router.get('/:id', auth, postCtrl.getOnePost);
 //créer un post
-router.post('/create', auth, multer, postCtrl.create);
+router.post('/create', auth, multer, postCtrl.createOnePost);
 //modifier post
-router.put('/modify', auth, multer, postCtrl.modify);
+router.put('/:id', auth, multer, postCtrl.modifyOnePost);
 //supprimer post
-router.delete('/delete', auth, multer, postCtrl.delete);
+router.delete('/:id', auth, multer, postCtrl.deleteOnePost);
 
 //exporte routeur
 module.exports = router;

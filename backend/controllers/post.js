@@ -3,12 +3,10 @@ const jwt = require('jsonwebtoken');
 const db = require("../models");
 const fs = require('fs');
 
-//importation cross site scripting
-const xss = require('xss')
-
-exports.getAll = (req, res) => {
+exports.getAllPosts = (req, res) => {
     db.Post.findAll({
         order: [['createdAt', 'DESC']],
+        include: [{models: db.Comments}]
     })
     .then((posts) => {
         res.status(200).json(posts);
@@ -18,37 +16,34 @@ exports.getAll = (req, res) => {
     })
 };
 
-exports.create = (req, res) => {
-    const title = req.body.title;
-    const content = req.body.content;
-
+exports.createOnePost = (req, res) => {
     // vérification que tous les champs sont remplis
-    if(title === null || content === null) {
-        return res.status(400).json({'error': "Certains champs ne sont pas remplis"});
+    if(!req.body.title || !req.body.content ) {
+        return res.status(400).json({message: "Tous les champs doivent être rensignés!"});
     }
+
+    const file = req.file ? req.file.filename : null;
 
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    let id = decodedToken.userId;
+    const id = decodedToken.userId;
 
-    const postObject = req.body;
-    
-    const file = req.file ? req.file.filename : null;
-    const post = new db.Post ({
-        userId: xss(id),
-        id: xss(req.body.id),
-        ...postObject,
+    const post = {
+        userId: id,
+        title: req.body.title,
+        content: req.body.content,
         attachment: file
-    });
-    post.save()
-        .then(() => res.status(201).json({ post }))   
-        .catch((error) => res.status(400).json({ error : error }));
-    
+    };
+
+    // création d'un post 
+    db.Post.create(post)
+        .then(() => res.status(201).json({ message: "Le post a été créé"}))
+        .catch(error => res.status(400).json({ error }));
 };
 
 exports.getOnePost = (req, res) => {
     db.Post.findOne({
-        where: {id: req.body.id} 
+        where: {id: req.params.id} 
     })
     .then((user) => {
         console.log('user');
@@ -61,10 +56,10 @@ exports.getOnePost = (req, res) => {
     });
 };
 
-exports.modify = (req, res) => {
+exports.modifyOnePost = (req, res) => {
     db.Post.findOne({
         attributes: ['id', 'title', 'content', 'attachment'], 
-        where: {id: req.body.id} 
+        where: {id: req.params.id} 
     })
     .then((post) => {
         post.update({
@@ -82,9 +77,9 @@ exports.modify = (req, res) => {
     });
 };
  
-exports.delete = (req, res) => {
+exports.deleteOnePost = (req, res) => {
     db.Post.findOne({
-        where: {id: req.body.id}
+        where: {id: req.params.id}
     })
     .then((post) => {
         const filename = `./images/${post.imageURL}`;
