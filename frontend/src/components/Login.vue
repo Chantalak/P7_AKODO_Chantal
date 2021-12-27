@@ -12,7 +12,7 @@
                 <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
                 <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
                 
-                <button aria-label="Connexion" type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
+                <button class="login" aria-label="Connexion" type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
                 <button aria-label="Création de compte" type="submit" v-else @click="signup()"> Créer un compte </button>
 
                 <p v-if="mode == 'login'" class="message" >Pas encore de compte? 
@@ -34,6 +34,7 @@ export default {
     data() {
         return {
             mode: 'login',
+            id: '',
             email: '',
             name: '',
             password: '',
@@ -41,6 +42,10 @@ export default {
     },
     computed: {
         ...mapState(['status'])
+    },
+    mounted() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.id = urlParams.get("login");
     },
     methods: {
         //méthodes pour gérer l'affichage mode login et signup
@@ -57,7 +62,7 @@ export default {
                 password: this.password,
             })
             .then(() => {
-                self.$router.push('/user');
+                self.$router.push('/user/:id');
             })
             .catch((error) => {
                 console.log(error);

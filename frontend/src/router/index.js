@@ -15,22 +15,23 @@ const routes = [
     component: Home,
   },
   {
-    path: "/user",
+    path: "/user/:id" ,
     name: "Profil",
+    props: true,
     component: Profil,
   },
   {
-    path: "/feed",
+    path: "/post",
     name: "Feed",
     component: Feed,
   },
   {
-    path: "/post",
+    path: "/article",
     name: "UserArticle",
     component: UserArticle,
   },
   {
-    path: "/post",
+    path: "/add",
     name: "AddPost",
     component: AddPost,
   },

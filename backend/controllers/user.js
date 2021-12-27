@@ -6,7 +6,7 @@ const fs = require('fs');
 exports.getAllUsers = (req, res ) => {
     db.User.findAll()
     .then((users) => {
-        res.status(200).json({users});
+        res.status(200).json(users);
     })
     .catch((error) => { 
         res.status(400).json({
@@ -21,7 +21,7 @@ exports.getOneUser = (req, res ) => {
     })
     .then((user) => {
         console.log(user)
-        res.status(200).json({user});
+        res.status(200).json(user);
     })
     .catch((error) => { 
         res.status(400).json({

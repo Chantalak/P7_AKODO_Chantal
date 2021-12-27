@@ -2,7 +2,7 @@
 	<main class="main">
 		<div class="card">
 			<h1 class="title"> Profil </h1>
-			<div>
+			<div >
 				<div class="image-crop"> 
 					<img class="avatar" src="../assets/profil.jpg" alt="photo de profil utilisateur" />
 				</div>
@@ -27,12 +27,13 @@ import { mapState } from 'vuex'
 export default {
 	name: 'UserProfil',
 	mounted() {
+		console.log(this.$route.currentUser.id);
 		this.$store.dispatch('getAllUsers');
 		this.$store.dispatch('getOneUser');
 	},
 	computed: {
-		...mapState(['currentUser', 'user'])
-	},
+		...mapState([ 'users', 'user', 'currentUser'])
+  	},
 	methods: {
 		deleteUser() {
 			this.$store.dispatch('deleteUser')
@@ -46,7 +47,7 @@ export default {
                 console.log(error);
             })
 		}
-	}
+	},
 }
 </script>
 

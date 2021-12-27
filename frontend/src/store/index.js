@@ -34,8 +34,8 @@ export default new Vuex.Store({
     currentUser: {}, 
     //USER
     users: [],
-
     user: {}, 
+    
     posts: [],
     post: {},
     article: {},
@@ -110,7 +110,7 @@ export default new Vuex.Store({
       })
     },
     //USER
-    getAllUsers({commit} , userDatas) {
+    getAllUsers({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
       instance.get('/user/', userDatas)
       .then((response) => {
@@ -121,11 +121,10 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    getOneUser({commit}) {
+    getOneUser({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get(`/user/${this.$router.params.id}`)
+      instance.get('/user/:id', userDatas)
       .then((response) => {
-        localStorage.setItem('user', response.data);
         commit( 'DATA_USER', response.data);
         console.log(response)
       })
@@ -137,7 +136,7 @@ export default new Vuex.Store({
 
     deleteUser({commit}) {
       commit('SET_STATUS', 'loading'),
-			instance.delete('/users/delete')
+			instance.delete('/user/delete')
 			.then((response)=> {
         commit('SET_STATUS', '');
 				console.log(response);
@@ -149,7 +148,7 @@ export default new Vuex.Store({
     //posts
     getAll({commit} , postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/posts/', postDatas)
+      instance.get('/post/', postDatas)
       .then((response) => {
         commit( 'ALL_POSTS', response.data);
         console.log(response)
@@ -160,7 +159,7 @@ export default new Vuex.Store({
     },
     getOnePost({commit}) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/posts/post')
+      instance.get('/post/post')
       .then((response) => {
         localStorage.setItem('post', response.data);
         commit( ' DATA_POST', response.data);
@@ -172,7 +171,7 @@ export default new Vuex.Store({
     },
     create({commit}, postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/posts/create', postDatas)
+      instance.post('/post/create', postDatas)
       .then((response) => {
         commit('SET_STATUS', '');
         commit( 'POST_ARTICLE', response.data);
