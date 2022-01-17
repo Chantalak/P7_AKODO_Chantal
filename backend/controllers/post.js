@@ -6,7 +6,6 @@ const fs = require('fs');
 exports.getAllPosts = (req, res) => {
     db.Post.findAll({
         order: [['createdAt', 'DESC']],
-        include: [{models: db.Comments}]
     })
     .then((posts) => {
         res.status(200).json(posts);
@@ -81,13 +80,10 @@ exports.deleteOnePost = (req, res) => {
     db.Post.findOne({
         where: {id: req.params.id}
     })
-    .then((post) => {
-        const filename = `./images/${post.imageURL}`;
-        fs.unlink(filename, () => {
-            db.Post.destroy({ where: { id: req.body.id }})
-            .then(() => res.status(200).json({ message: "Votre post a bien été supprimé" }))
-            .catch((error) => res.status(400).json({ error }))
-        })
+    .then(() => {    
+        db.Post.destroy({ where: { id: req.params.id }})
+        .then(() => res.status(200).json({ message: "Votre post a bien été supprimé" }))
+        .catch((error) => res.status(400).json({ error }))
     })
     .catch((error) => { 
         res.status(400).json({

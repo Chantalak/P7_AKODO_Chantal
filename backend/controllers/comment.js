@@ -5,11 +5,15 @@ const fs = require('fs');
 
 // logique métier
 exports.getAllComments = (req, res, next) => {
-    db.Comment.findAll()
-    .then(comments => {
-        res.status(200).json( comments );
+    db.Comment.findAll({
+        order: [['createdAt', 'DESC']],
     })
-    .catch(error => res.status(400).json({ error }));
+    .then((comments) => {
+        res.status(200).json(comments);
+    })
+    .catch((error) => {
+        res.status(400).json({ error: error })
+    })
 };
 
 exports.createOneComment = (req, res, next) => {

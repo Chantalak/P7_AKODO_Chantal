@@ -30,30 +30,40 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: '',
+
     //AUTH
     currentUser: {}, 
+
     //USER
     users: [],
     user: {}, 
     
+    //POST
     posts: [],
-    post: {},
     article: {},
+    post: {},
+
+    //COMMENT
     comments: [],
+
+
     comment: {}
   },
   getters: {
     token: (state) => !!state.currentUser.token,
+    id: (state) => state.currentUser.userId,
   },
   mutations: {
     SET_STATUS(state, status) {
       state.status = status;
     },
+
     //AUTH
     LOG_USER(state, currentUser) { 
       window.localStorage.currentUser = JSON.stringify(currentUser);
       state.currentUser = currentUser;
     },
+
     //USER
     ALL_USERS(state, users){
       state.users = users;
@@ -63,7 +73,7 @@ export default new Vuex.Store({
       state.user = user;
     },
 
-   
+    //POST
     ALL_POSTS(state, posts){
       state.posts = posts;
     },
@@ -75,9 +85,13 @@ export default new Vuex.Store({
       window.localStorage.post = JSON.stringify(post);
       state.post = post;
     },
+
+    //COMMENT
     ALL_COMMENTS(state, comments){
       state.comments = comments;
     },
+
+
     POST_COMMENT(state, comment) {
       state.comment = comment;
     },
@@ -109,6 +123,7 @@ export default new Vuex.Store({
         console.log(error);
       })
     },
+
     //USER
     getAllUsers({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
@@ -123,7 +138,7 @@ export default new Vuex.Store({
     },
     getOneUser({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/user/:id', userDatas)
+      instance.get(`/user/${this.getters.id}`, userDatas)
       .then((response) => {
         commit( 'DATA_USER', response.data);
         console.log(response)
@@ -132,11 +147,20 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-
-
-    deleteUser({commit}) {
+    modifyOneUser({commit}, userDatas) {
       commit('SET_STATUS', 'loading'),
-			instance.delete('/user/delete')
+      instance.post(`/user/${this.getters.id}`, userDatas)
+      .then((response) => {
+        commit( 'DATA_USER', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    deleteUser({commit}, userDatas) {
+      commit('SET_STATUS', 'loading'),
+			instance.delete(`/user/${this.getters.id}`, userDatas)
 			.then((response)=> {
         commit('SET_STATUS', '');
 				console.log(response);
@@ -145,11 +169,13 @@ export default new Vuex.Store({
 				commit('SET_STATUS', 'error');
 			})
 		},
-    //posts
-    getAll({commit} , postDatas) {
+
+    //POST
+    getAllPosts({commit} , postDatas) {
       commit('SET_STATUS', 'loading'),
       instance.get('/post/', postDatas)
       .then((response) => {
+        localStorage.setItem('postId', response.data.id);
         commit( 'ALL_POSTS', response.data);
         console.log(response)
       })
@@ -157,19 +183,7 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    getOnePost({commit}) {
-      commit('SET_STATUS', 'loading'),
-      instance.get('/post/post')
-      .then((response) => {
-        localStorage.setItem('post', response.data);
-        commit( ' DATA_POST', response.data);
-        console.log(response)
-      })
-      .catch(() => {
-        commit('SET_STATUS', 'error');
-      })
-    },
-    create({commit}, postDatas) {
+    createOnePost({commit}, postDatas) {
       commit('SET_STATUS', 'loading'),
       instance.post('/post/create', postDatas)
       .then((response) => {
@@ -181,10 +195,34 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    //comments 
-    getAllComments({commit}, commentDatas) {
+    getOnePost({commit}, postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/comments/', commentDatas)
+      instance.get('/post/' + window.localStorage.getItem('postId'), postDatas)
+      .then((response) => {
+        localStorage.setItem('post', response.data);
+        commit( 'DATA_POST', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    deleteOnePost({commit}, postDatas) {
+      commit('SET_STATUS', 'loading'),
+      instance.delete('/post/' + window.localStorage.getItem('postId'), postDatas)
+      .then((response)=> {
+        commit('SET_STATUS', '');
+				console.log(response);
+			})
+			.catch(() => { 
+				commit('SET_STATUS', 'error');
+			})
+    },
+
+    //COMMENT
+    getAllComments({commit} , commentDatas) {
+      commit('SET_STATUS', 'loading'),
+      instance.get('/comment/', commentDatas)
       .then((response) => {
         commit( 'ALL_COMMENTS', response.data);
         console.log(response)
@@ -193,7 +231,7 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    createComment({commit}, commentDatas) {
+    createOneComment({commit}, commentDatas) {
       commit('SET_STATUS', 'loading'),
       instance.post('/commments/create', commentDatas)
       .then((response) => {
@@ -205,6 +243,8 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
+
+
     deleteComment({commit}) {
       commit('SET_STATUS', 'loading'),
 			instance.delete('/comments/delete')

@@ -14,14 +14,7 @@
                                 <div class="info">
                                     <p>{{ post.createdAt }}</p>
                                 </div>
-                                <div class="addComment__Title">Commentaires :
-                                    <div v-for="comment in comments" :key="comment.postId">
-                                        <p v-if="post.id == comment.postId">{{ comment.content }}
-                                            <span class="btn btn-danger" type="submit" v-on:click="deleteComment()"> Supprimer </span>
-                                        </p>
-                                    </div>
-                                    <Comments/>
-                                </div>
+                                <button type="submit" @click="$router.push(`article/${post.id}`)">Afficher plus</button>
                             </div>
                         </div>
                     </div>
@@ -33,38 +26,20 @@
 
 <script>
 import { mapState } from 'vuex'
-import Comments from '../components/Comments.vue';
 
 export default {
     name: 'Allposts',
-    components: {
-        Comments,
-    },
 	//moment ou vue est affichée 
 	mounted() {
-		this.$store.dispatch('getAll')
-        this.$store.dispatch('getAllComments')
-        this.$store.dispatch('deleteComment')
+		this.$store.dispatch('getAllPosts')
 	},
 	computed: {
-		...mapState([ 'comments', 'comment', 'posts', 'currentUser', 'user'])
+		...mapState(['posts', 'user'])
   	},
     methods: {
         gotopost(){
-            this.$router.push('post');
-        },    
-        deleteComment() {
-            const self = this;
-			this.$store.dispatch('deleteComment', {
-                id : this.$store.state.comment.id,
-            }) 
-            .then(() => {
-                console.log(self)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-		}  
+            this.$router.push('add');
+        }, 
     },
 }
 </script>

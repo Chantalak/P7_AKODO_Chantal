@@ -2,10 +2,8 @@
 	<main class="main">
 		<div class="card">
 			<h1 class="title"> Profil </h1>
-			<div >
-				<div class="image-crop"> 
-					<img class="avatar" src="../assets/profil.jpg" alt="photo de profil utilisateur" />
-				</div>
+			<div class="image-crop"> 
+				<img class="avatar" :src="user.imageURL" alt="photo de profil utilisateur" />
 			</div>
 			<div class="info">
 				<span> Nom : {{ user.name }} </span>
@@ -15,6 +13,7 @@
 				<div></div>
 			</div>
 			<div class="delete">
+				<button class="update" v-on:click="gotoupdate()"><i class="fas fa-user-edit"></i></button>
 				<button aria-label="Suppression compte" class="btn btn-danger" type="submit" v-on:click="deleteUser()"> <i class="fas fa-user-times"></i> </button>
 			</div>
 		</div>
@@ -27,12 +26,10 @@ import { mapState } from 'vuex'
 export default {
 	name: 'UserProfil',
 	mounted() {
-		console.log(this.$route.currentUser.id);
-		this.$store.dispatch('getAllUsers');
 		this.$store.dispatch('getOneUser');
 	},
 	computed: {
-		...mapState([ 'users', 'user', 'currentUser'])
+		...mapState(['user', 'currentUser'])
   	},
 	methods: {
 		deleteUser() {
@@ -46,7 +43,10 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
-		}
+		},
+		gotoupdate() {
+            this.$router.push('update');
+        }, 
 	},
 }
 </script>
@@ -115,6 +115,10 @@ export default {
 		margin: 0 auto;
 		justify-content: center;
 		width: 280px;
+	}
+
+	.update {
+		margin-right: 5%;
 	}
 
 	button {

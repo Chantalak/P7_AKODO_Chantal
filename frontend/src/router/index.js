@@ -5,6 +5,7 @@ import Profil from "../views/Profil.vue";
 import Feed from "../views/Feed.vue";
 import AddPost from "../views/AddPost.vue";
 import UserArticle from "../views/UserArticle.vue";
+import EditProfil from "../views/EditProfil.vue";
 
 Vue.use(VueRouter);
 
@@ -15,18 +16,22 @@ const routes = [
     component: Home,
   },
   {
-    path: "/user/:id" ,
+    path: "/profil" ,
     name: "Profil",
-    props: true,
     component: Profil,
   },
   {
-    path: "/post",
+    path: "/update" ,
+    name: "EditProfil",
+    component:  EditProfil,
+  },
+  {
+    path: "/feed",
     name: "Feed",
     component: Feed,
   },
   {
-    path: "/article",
+    path: "/article/:id",
     name: "UserArticle",
     component: UserArticle,
   },

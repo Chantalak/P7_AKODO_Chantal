@@ -30,6 +30,12 @@ exports.getOneUser = (req, res ) => {
     });
 };
 
+exports.modifyOneUser = (req, res) => {
+  
+    console.log( req.file);
+
+};
+
 exports.deleteOneUser = (req, res) => {
     db.User.findOne({
         where: {id: req.params.id}
@@ -37,8 +43,8 @@ exports.deleteOneUser = (req, res) => {
     .then((user) => {
         const filename = `./images/${user.imageURL}`;
         fs.unlink(filename, () => {
-            db.Post.destroy({ where: {userId: id}})
-            db.User.destroy({ where: {id: id}})
+            db.Post.destroy({ where: {userId: req.params.id}})
+            db.User.destroy({ where: {id: req.params.id}})
             .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
             .catch((error) => res.status(400).json({ error }))
         })

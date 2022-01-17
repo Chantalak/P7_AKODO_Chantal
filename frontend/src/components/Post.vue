@@ -9,7 +9,7 @@
                     <textarea v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
                     <input type="file"/> 
                     <div>
-                        <button type="submit" @click="create()"> Publier </button>
+                        <button type="submit" @click="createOnePost()"> Publier </button>
                         <button @click="cancel()"> Annuler </button> 
                     </div>
                 </div>
@@ -35,15 +35,13 @@ export default {
 		...mapState([ 'status', 'user', 'currentUser', 'post', 'posts' ])
   	},
     methods: {
-        create() {
-            //const fd = new FormData();
-            //fd.append('image', this.attachment, this.attachment.name)
+        createOnePost() {
             const self = this;
-            this.$store.dispatch('create', //fd, 
+            this.$store.dispatch('createOnePost',  
             {
                 title: this.title,
                 content: this.content,
-                attachment: this.attchment,
+                attachment: this.attachment,
             })
             .then(() => {
                 console.log(self)
@@ -55,9 +53,6 @@ export default {
         cancel() {
             this.$router.push('feed');
         },
-        //onFileSelected(event) {
-            //this.attachment = event.target.files[0]
-        //}
     }
 }
 </script>

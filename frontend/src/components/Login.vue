@@ -34,7 +34,6 @@ export default {
     data() {
         return {
             mode: 'login',
-            id: '',
             email: '',
             name: '',
             password: '',
@@ -42,10 +41,6 @@ export default {
     },
     computed: {
         ...mapState(['status'])
-    },
-    mounted() {
-        const urlParams = new URLSearchParams(window.location.search);
-        this.id = urlParams.get("login");
     },
     methods: {
         //méthodes pour gérer l'affichage mode login et signup
@@ -61,8 +56,8 @@ export default {
                 email: this.email,
                 password: this.password,
             })
-            .then(() => {
-                self.$router.push('/user/:id');
+            .then(() => {  
+                self.$router.push({name: 'Profil' });
             })
             .catch((error) => {
                 console.log(error);
