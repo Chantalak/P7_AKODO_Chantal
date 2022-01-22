@@ -1,9 +1,13 @@
 <template>
     <main class="main">
-        <form @submit.prevent="modifyOneUser" method="post" enctype="multipart/form-data">
+        <form @submit.prevent="sendFile" enctype="multipart/form-data">
             <div class="field"> 
+                <label for="file" class="label"> Télécharger </label>
                 <input type="file" name="image" @change="selectFile" />
-                <button @click="modifyOneUser">Envoyer</button>
+               
+            </div>
+            <div class="field">  
+                <button class="button is-info">Envoyer</button>
             </div>
         </form>
     </main>
@@ -11,13 +15,12 @@
 
 <script>
 //import { mapState } from 'vuex'
-//import axios from 'axios'
+import axios from 'axios'
 
 export default {
 	name: 'UpdateProfil',
     data() {
         return {
-            name: "",
             file: null,
         }
     },
@@ -26,20 +29,16 @@ export default {
             this.file = event.target.files[0];
             console.log(event)
         },
-        modifyOneUser() {
-            const formData = new FormData();
-            formData.append('file', this.file, this.file.name);
 
-            this.$store.dispatch('modifyOneUser', formData, {
-                name: this.name,
-                file: this.file,
-            })
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })    
+        async sendFile() {
+            const formData = new FormData();
+            formData.append('file', this.file);
+
+            try {
+                await axios.post('/upload', formData);
+            } catch(err) {
+                console.log(err);
+            }
  		},
     },
 }

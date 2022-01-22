@@ -1,5 +1,8 @@
-//const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const multer = require('multer');
 
+const User = require("../models/user");
 const db = require("../models");
 const fs = require('fs');
 
@@ -30,9 +33,29 @@ exports.getOneUser = (req, res ) => {
     });
 };
 
+
 exports.modifyOneUser = (req, res) => {
-  
-    console.log( req.file);
+    
+    const file = req.file ? req.file.filename : null;
+
+    db.User.findOne({
+        attributes: ['id', 'imageURL',], 
+        where: {id: req.params.id} 
+    })
+    .then((user) => {
+        user.update({
+            imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        })
+        .then(() => res.status(200).json({user, file}))
+        .catch(error => res.status(400).json({ error }));
+    
+    }) 
+    .catch((error) => { 
+        res.status(400).json({
+            error: error
+        });
+    });
+    
 
 };
 

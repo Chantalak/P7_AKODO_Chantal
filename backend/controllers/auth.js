@@ -9,6 +9,8 @@ exports.signup = (req, res, next) => {
     const name = req.body.name;
     const password = req.body.password;
 
+    const file = req.file ? req.file.filename : null;
+
     //vérification que tous les champs obligatoires sont remplis
     if(email === null || name === null || password === null ) {
         return res.status(400).json({ error: "Certains champs ne sont pas bien remplis" });
@@ -28,7 +30,7 @@ exports.signup = (req, res, next) => {
                 email: email,
                 name: name,
                 password: hash,
-                imageURL: undefined,
+                imageURL: file,
                 isAdmin: 0,
             })
         });
