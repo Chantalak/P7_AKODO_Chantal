@@ -8,13 +8,24 @@
                     <div class="container mt-5">
                         <div class="d-flex justify-content-center row">
                             <div class="card col-md-8"> 
-                                <h2 class="card-title"> {{ post.title }} </h2>
-                                <p class="card-content"> {{ post.content }} </p>
-                                <img :src="post.attachment" alt="photo, image ou gif" />
-                                <div class="info">
-                                    <p>{{ post.createdAt }}</p>
+                                <div class="userpost">
+                                    <div v-for="user in users" :key="user.id">
+                                        <div v-if="post.userId == user.id">
+                                           <img class="avatar" :src="user.imageURL" alt="photo de profil utilisateur" />
+                                           <span> <i>{{ user.name }}</i> </span>
+                                        </div> 
+                                    </div>
                                 </div>
-                                <button type="submit" @click="$router.push(`article/${post.id}`)">Afficher plus</button>
+                                <div class="post">
+                                    <h2 class="card-title"> {{ post.title }} </h2>
+                                    <p class="card-content"> 
+                                        {{ post.content }} 
+                                    </p>
+                                    <div class="info">
+                                        <p> <i>Publié le {{ new Date(post.updatedAt).toLocaleDateString() }}</i> </p>
+                                    </div>
+                                    <button class="button" type="submit" @click="$router.push(`feed/article/${post.id}`)">Afficher plus</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -34,11 +45,11 @@ export default {
 		this.$store.dispatch('getAllPosts')
 	},
 	computed: {
-		...mapState(['posts', 'user'])
+		...mapState(['posts', 'user', 'currentUser', 'users'])
   	},
     methods: {
         gotopost(){
-            this.$router.push('add');
+            this.$router.push('/feed/add');
         }, 
     },
 }
@@ -54,13 +65,19 @@ export default {
     .card-title {
         background-color: #ffffff;
     }
+    .card-content {
+        white-space: nowrap; 
+        width: 100%; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        
+    }
     button {
 		padding: 10px 0;
-		width: 200px;
+		width: 150px;
 		margin: 10px 0;
-		border-radius: 25px;
 		border: none;
-		font-size: 20px;
+		font-size: 15px;
 		letter-spacing: 0.2px;
 		font-weight: 500;
 		background-color: #ffd7d7;
@@ -81,9 +98,22 @@ export default {
     }
     h2 {
         color: #fd2d01;
+        font-size: 20px;
+    }
+    .userpost {
+        text-align: left;
     }
     img {
-      width: 200px;
-      margin: 0 0 2rem;
+        margin: 0;
+        border-radius: 50px;
+        height: 40px;
+        border-radius: 50px;
+    }
+    .post {
+        display: flex;
+        flex-direction: column;
+    }
+    .button { 
+      margin: 0;   
     }
 </style>

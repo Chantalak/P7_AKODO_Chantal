@@ -8,13 +8,30 @@
 			<div class="info">
 				<span> Nom : {{ user.name }} </span>
 				<span><a v-bind:href="`mailto:${ user.email }`">Envoyer un mail</a></span>
-			</div>
-			<div v-if="user.isAdmin == true">
-				<div></div>
+				<div v-if="user.isAdmin == true">
+					<span>Nombre d'utilisateurs :</span>
+						{{ users.length }}
+				</div>
 			</div>
 			<div class="delete">
 				<button class="update" v-on:click="gotoupdate()"><i class="fas fa-user-edit"></i></button>
-				<button aria-label="Suppression compte" class="btn btn-danger" type="submit" v-on:click="deleteUser()"> <i class="fas fa-user-times"></i> </button>
+				<button onclick="document.getElementById('id01').style.display='block'"><i class="fas fa-user-times"></i></button>
+			</div>
+			
+
+			<div id="id01" class="modal">
+			<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+			<form class="modal-content" action="/action_page.php">
+				<div class="container">
+				<h1> Suppression compte </h1>
+				<p> Êtes-vous certain(e)s de vouloir supprimer votre compte ?</p>
+				
+				<div class="center">
+					<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Annuler</button>
+					<button type="button" v-on:click="deleteUser()" class="deletebtn">Delete</button>
+				</div>
+				</div>
+			</form>
 			</div>
 		</div>
 	</main>
@@ -27,26 +44,36 @@ export default {
 	name: 'UserProfil',
 	mounted() {
 		this.$store.dispatch('getOneUser');
+		this.$store.dispatch('getAllUsers');
 	},
 	computed: {
-		...mapState(['user', 'currentUser'])
+		...mapState(['user', 'users', 'currentUser'])
   	},
 	methods: {
+		modal() {
+			var modal = document.getElementById('id01');
+
+			window.onclick = function(event) {
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			}
+		},
+		gotoupdate() {
+            this.$router.push('/profil/update');
+        }, 
 		deleteUser() {
 			this.$store.dispatch('deleteUser')
             .then(() => {
 				this.$store.replaceState({})
 				localStorage.clear();
 				location.replace(location.origin);
-				alert("Cliquez sur ok et l'utilisateur sera supprimé");
+				//alert("Cliquez sur ok et l'utilisateur sera supprimé");
             })
             .catch((error) => {
                 console.log(error);
             })
 		},
-		gotoupdate() {
-            this.$router.push('update');
-        }, 
 	},
 }
 </script>
@@ -72,24 +99,20 @@ export default {
 	}
 
 	.image-crop {
-		display: block;
-		position: relative;
-		background-color: #E6EBEE;
-		width: 150px;
-		height: 150px;
-		margin: 0 auto;
-		margin-top: 30px;
-		overflow: hidden;
-		border-radius: 50%;
-		box-shadow: 1px 1px 5px #4069E2;
-		
+		display: flex;
+  		flex-direction: column;
+  		flex-wrap: wrap;
+  		align-items: center;
+		margin-top: 2%;
+	}
+
+	img{
+		width: 100px;
+  		height: 100px; 
 	}
 
 	.avatar {
-		display: inline;
-		height: 230px;
-		width: auto;
-		margin-left: -40%;
+		object-fit: fill;
 	}
 
 	.info {
@@ -121,6 +144,15 @@ export default {
 		margin-right: 5%;
 	}
 
+	.cancelbtn {
+		margin-right: 5%;
+	}
+
+	.center {
+		display: flex;
+		justify-content: center;
+	}
+
 	button {
 		display: block;
 		position: relative;
@@ -140,5 +172,32 @@ export default {
 		transform: scale(1.03);
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
+	}
+
+	.container {
+		padding: 16px;
+		text-align: center;
+		width: 70%;
+	}
+
+	.modal {
+		display: none; 
+		position: fixed; 
+		z-index: 1; 
+		left: 0;
+		top: 30%;
+		width: 100%; 
+		height: 100%; 
+		overflow: auto; 
+		padding-top: 50px;
+	}
+
+	.close {
+		position: absolute;
+		right: 35px;
+		top: 15px;
+		font-size: 40px;
+		font-weight: bold;
+		color: #070707;
 	}
 </style>

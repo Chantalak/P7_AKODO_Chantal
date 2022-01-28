@@ -8,8 +8,7 @@ exports.signup = (req, res, next) => {
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
-
-    const file = req.file ? req.file.filename : null;
+    const imageURL = req.body.imageURL;
 
     //vérification que tous les champs obligatoires sont remplis
     if(email === null || name === null || password === null ) {
@@ -29,8 +28,7 @@ exports.signup = (req, res, next) => {
             db.User.create ({
                 email: email,
                 name: name,
-                password: hash,
-                imageURL: file,
+                password: hash, 
                 isAdmin: 0,
             })
         });

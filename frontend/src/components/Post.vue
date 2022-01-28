@@ -5,8 +5,8 @@
             <div class="d-flex justify-content-center row">
                 <div class="form col-md-8">
                     <h1>Créer votre article</h1>
-                    <input v-model="title" name="title" type="text" placeholder="Titre" required />
-                    <textarea v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
+                    <input style="height: 50px" v-model="title" name="title" type="text" placeholder="Titre" required />
+                    <textarea style="height: 200px" v-model="content" name="content" type="text" placeholder="Contenu de votre article" required />
                     <input type="file"/> 
                     <div>
                         <button type="submit" @click="createOnePost()"> Publier </button>
@@ -51,7 +51,7 @@ export default {
             })
         },
         cancel() {
-            this.$router.push('feed');
+            this.$router.push('/feed');
         },
     }
 }
@@ -79,7 +79,7 @@ export default {
         -webkit-transition: all 0.3 ease;
         transition: all 0.3 ease;
         cursor: pointer;
-        margin: 1% 2%; 
+        margin: 5%; 
         border-radius: 6px;
 
     }

@@ -1,8 +1,3 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const multer = require('multer');
-
-const User = require("../models/user");
 const db = require("../models");
 const fs = require('fs');
 
@@ -33,7 +28,6 @@ exports.getOneUser = (req, res ) => {
     });
 };
 
-
 exports.modifyOneUser = (req, res) => {
     
     const file = req.file ? req.file.filename : null;
@@ -56,12 +50,12 @@ exports.modifyOneUser = (req, res) => {
         });
     });
     
-
 };
 
 exports.deleteOneUser = (req, res) => {
+
     db.User.findOne({
-        where: {id: req.params.id}
+        where: {id: req.params.id }
     })
     .then((user) => {
         const filename = `./images/${user.imageURL}`;

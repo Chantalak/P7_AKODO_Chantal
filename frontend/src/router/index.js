@@ -6,6 +6,7 @@ import Feed from "../views/Feed.vue";
 import AddPost from "../views/AddPost.vue";
 import UserArticle from "../views/UserArticle.vue";
 import EditProfil from "../views/EditProfil.vue";
+import DeleteUser from "../components/DeleteUser.vue";
 
 Vue.use(VueRouter);
 
@@ -15,15 +16,21 @@ const routes = [
     name: "Home",
     component: Home,
   },
+
   {
     path: "/profil" ,
     name: "Profil",
     component: Profil,
   },
   {
-    path: "/update" ,
+    path: "/profil/update" ,
     name: "EditProfil",
-    component:  EditProfil,
+    component: EditProfil,
+  },
+  {
+    path: "/profil/delete" ,
+    name: "DeleteUser",
+    component: DeleteUser,
   },
   {
     path: "/feed",
@@ -31,14 +38,14 @@ const routes = [
     component: Feed,
   },
   {
-    path: "/article/:id",
-    name: "UserArticle",
-    component: UserArticle,
-  },
-  {
-    path: "/add",
+    path: "/feed/add",
     name: "AddPost",
     component: AddPost,
+  },
+  {
+    path: "/feed/article/:id",
+    name: "UserArticle",
+    component: UserArticle,
   },
 ];
 

@@ -45,9 +45,9 @@ export default new Vuex.Store({
 
     //COMMENT
     comments: [],
+    commentary: {},
+    comment: {},
 
-
-    comment: {}
   },
   getters: {
     token: (state) => !!state.currentUser.token,
@@ -90,11 +90,14 @@ export default new Vuex.Store({
     ALL_COMMENTS(state, comments){
       state.comments = comments;
     },
-
-
-    POST_COMMENT(state, comment) {
+    POST_COMMENT(state, commentary) {
+      state.commentary = commentary;
+    },
+    DATA_COMMENT(state, comment) {
       state.comment = comment;
     },
+    
+    
   },
   actions: {
     //AUTH
@@ -220,10 +223,11 @@ export default new Vuex.Store({
     },
 
     //COMMENT
-    getAllComments({commit} , commentDatas) {
+    getAllComments({commit} , postDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/comment/', commentDatas)
+      instance.get('/comment/', postDatas)
       .then((response) => {
+        localStorage.setItem('commentId', response.data.id);
         commit( 'ALL_COMMENTS', response.data);
         console.log(response)
       })
@@ -233,10 +237,21 @@ export default new Vuex.Store({
     },
     createOneComment({commit}, commentDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.post('/commments/create', commentDatas)
+      instance.post('/comment/create', commentDatas)
       .then((response) => {
         commit('SET_STATUS', '');
-        commit( 'POST_COMMENT', response.data);
+        commit('POST_COMMENT', response.data);
+        console.log(response)
+      })
+      .catch(() => {
+        commit('SET_STATUS', 'error');
+      })
+    },
+    getOneComments({commit}, commentDatas) {
+      commit('SET_STATUS', 'loading'),
+      instance.get('/comment/' + window.localStorage.getItem('commmenId'), commentDatas)
+      .then((response) => {
+        commit( 'DATA_COMMENT', response.data);
         console.log(response)
       })
       .catch(() => {

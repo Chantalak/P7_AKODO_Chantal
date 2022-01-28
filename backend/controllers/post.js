@@ -31,7 +31,7 @@ exports.createOnePost = (req, res) => {
         userId: id,
         title: req.body.title,
         content: req.body.content,
-        attachment: file
+        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
 
     // création d'un post 
@@ -42,11 +42,11 @@ exports.createOnePost = (req, res) => {
 
 exports.getOnePost = (req, res) => {
     db.Post.findOne({
-        where: {id: req.params.id} 
+        where: {id: req.params.id}, 
     })
-    .then((user) => {
-        console.log('user');
-        res.status(200).json(user);
+    .then((post) => {
+        console.log('post');
+        res.status(200).json(post);
     })
     .catch((error) => { 
         res.status(400).json({
@@ -56,6 +56,8 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.modifyOnePost = (req, res) => {
+    const file = req.file ? req.file.filename : null;
+
     db.Post.findOne({
         attributes: ['id', 'title', 'content', 'attachment'], 
         where: {id: req.params.id} 
@@ -63,7 +65,7 @@ exports.modifyOnePost = (req, res) => {
     .then((post) => {
         post.update({
             ...req.body, 
-            filename: `${req.body.attachment}`,
+            attachement: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         })
         .then(() => res.status(200).json({ message: "Votre post a bien été modifié !"}))
         .catch(error => res.status(400).json({ error }));
@@ -77,8 +79,12 @@ exports.modifyOnePost = (req, res) => {
 };
  
 exports.deleteOnePost = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const isAdmin = decodedToken.isAdmin;
+
     db.Post.findOne({
-        where: {id: req.params.id}
+        where: {id: req.params.id || isAdmin == true}
     })
     .then(() => {    
         db.Post.destroy({ where: { id: req.params.id }})

@@ -7,41 +7,34 @@
                     <div class="d-flex justify-content-center row">
                         <div class="col-md-8"> 
                             <p class="card-content"> {{ post.content }} </p>
+                            <div v-if="post.attachment">
+                                <img class="avatar" :src="post.attachment" alt="photo du post" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="currentUser.userId == post.userId">
-                <button aria-label="Suppression compte" class="btn btn-danger" type="submit" v-on:click="deleteOnePost()"> Supprimer votre Article </button>
+            <div v-if="currentUser.userId == post.userId || currentUser.isAdmin == true">
+                <button aria-label="Suppression de votre post" class="btn btn-danger" type="submit" v-on:click="deleteOnePost()"> Supprimer votre Article </button>
             </div>
         </div>
+        <Comments/>
         <div>
-            <div class="addComment__Title">Commentaires :
-                <div v-for="comment in comments" :key="comment.postId">
-                    <div v-if="post.id == comment.postId">
+            <div class="comments">
+                <div class="w3-border w3-row" v-for="comment in comments" :key="comment.id">
+                    <div class="w3-container w3-threequarter" v-if="post.id == comment.postId">
                         {{ comment.content }}
                     </div>
+                    <div class="w3-container w3-quarter"><i class="fas fa-times"></i></div>
                 </div>
             </div>
-            <form class="addComment">
-                <div class="bg-light p-2">
-                    <div class="d-flex flex-row align-items-start">
-                        <input class="form-control ml-1 shadow-none textarea" v-model="content" type="text" placeholder="Tapez votre commentaire" required />
-                    </div>
-                    <div class="mt-2 text-right">
-                        <button class="btn btn-primary btn-sm shadow-none" id="btn" type="submit" @click="createOneComment()">
-                            Poster
-                        </button>
-                    </div>
-                </div>   
-            </form>
         </div>
-    </div>        
-            
+    </div>              
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import Comments from '../components/Comments.vue'
 
 export default {
     name: 'SelectPost',
@@ -51,6 +44,9 @@ export default {
             content: '',
         }
     },
+    components: {
+        Comments,
+    },
     computed: {
 		...mapState(['post', 'currentUser', 'comments', 'comment'])
   	},
@@ -59,20 +55,19 @@ export default {
             localStorage.postId = this.postId;
         }
         this.$store.dispatch('getOnePost');
+        this.$store.dispatch('getAllComments');
     },
     methods: {
-       createOneComment() {
-            //const self = this;
-            this.$store.dispatch('create', {
-                content: this.content,
-            })
-            .then((response) => {
-                console.log(response)
+        deleteOnePost() {
+            const self = this;
+			this.$store.dispatch('deleteOnePost')
+            .then(() => {
+				self.$router.push('/feed');
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
             })
-        },
+		},
     },
 }
 </script>
@@ -87,5 +82,14 @@ export default {
     img {
       width: 200px;
       margin: 0 0 2rem;
+    }
+    .btn-danger {
+        margin: 2% 0;
+    }
+    .comments {
+        background-color: #f2f2f2;
+    }
+    .w3-row {
+        padding: 2%;
     }
 </style>

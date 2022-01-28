@@ -4,7 +4,7 @@ const db = require("../models");
 const fs = require('fs');
 
 // logique métier
-exports.getAllComments = (req, res, next) => {
+exports.getAllComments = (req, res) => {
     db.Comment.findAll({
         order: [['createdAt', 'DESC']],
     })
@@ -16,7 +16,7 @@ exports.getAllComments = (req, res, next) => {
     })
 };
 
-exports.createOneComment = (req, res, next) => {
+exports.createOneComment = (req, res) => {
      // vérification que tous les champs sont remplis
      if( !req.body.content ) {
         return res.status(400).json({message: "Votre commentaire ne peut pas être vide!"});
@@ -34,6 +34,21 @@ exports.createOneComment = (req, res, next) => {
     comment.save()
         .then(() => { res.status(201).json({ message: "Votre commentaire a été posté"}) })
         .catch((error) => { res.status(400).json({ error: error}) })
+};
+
+exports.getOneComment = (req, res) => {
+    db.Comment.findOne({
+        where: {id: req.params.id}, 
+    })
+    .then((comment) => {
+        console.log('comment');
+        res.status(200).json(comment);
+    })
+    .catch((error) => { 
+        res.status(400).json({
+            error: error
+        });
+    });
 };
 
 exports.modifyOneComment = (req, res, next) => {
@@ -57,7 +72,13 @@ exports.modifyOneComment = (req, res, next) => {
 };
 
 exports.deleteOneComment = (req, res) => {
-    db.Comment.destroy({ where: {id: req.body.id} })
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const isAdmin = decodedToken.isAdmin;
+
+    db.Comment.destroy({ 
+        where: {id: req.body.id || isAdmin} 
+    })
         .then(() => res.status(200).json({ message: 'Commentaire supprimé !'}))
         .catch(error => res.status(400).json({ error }));
 };
