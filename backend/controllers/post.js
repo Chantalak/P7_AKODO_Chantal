@@ -31,7 +31,7 @@ exports.createOnePost = (req, res) => {
         userId: id,
         title: req.body.title,
         content: req.body.content,
-        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        attachment: file
     };
 
     // création d'un post 

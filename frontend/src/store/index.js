@@ -91,9 +91,11 @@ export default new Vuex.Store({
       state.comments = comments;
     },
     POST_COMMENT(state, commentary) {
+      window.localStorage.article = JSON.stringify(commentary);
       state.commentary = commentary;
     },
     DATA_COMMENT(state, comment) {
+      window.localStorage.post = JSON.stringify(comment);
       state.comment = comment;
     },
     
@@ -227,7 +229,7 @@ export default new Vuex.Store({
       commit('SET_STATUS', 'loading'),
       instance.get('/comment/', postDatas)
       .then((response) => {
-        localStorage.setItem('commentId', response.data.id);
+        localStorage.setItem('commentId', response.data[0].id);
         commit( 'ALL_COMMENTS', response.data);
         console.log(response)
       })
@@ -247,7 +249,7 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    getOneComments({commit}, commentDatas) {
+    getOneComment({commit}, commentDatas) {
       commit('SET_STATUS', 'loading'),
       instance.get('/comment/' + window.localStorage.getItem('commmenId'), commentDatas)
       .then((response) => {

@@ -22,18 +22,10 @@ export default {
         return {
             content: '',
             postId: '',
-            commmenId: '',
         }
     },
-    mounted() {
-         if (localStorage.commmenId) {
-            localStorage.commmenId = this.commmenId;
-        }
-		this.$store.dispatch('getAllComments')
-		this.$store.dispatch('getOneComment')
-	},
 	computed: {
-		...mapState([ 'comments', 'commentary', 'comment', 'currentUser', 'post' ])
+		...mapState([ 'commentary', 'post' ])
   	},
     methods: {
         createOneComment() {
@@ -49,7 +41,6 @@ export default {
                 console.log(error)
             })
         },
-    
     },
 }
 </script>

@@ -26,13 +26,13 @@ exports.createOneComment = (req, res) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     let id = decodedToken.userId;
 
-    const comment = new db.Comment({
+    db.Comment.create({
         userId: id,
         postId: req.body.postId,
         content: req.body.content,
     })
     comment.save()
-        .then(() => { res.status(201).json({ message: "Votre commentaire a été posté"}) })
+        .then(() => { res.status(201).json({ comment }) })
         .catch((error) => { res.status(400).json({ error: error}) })
 };
 
