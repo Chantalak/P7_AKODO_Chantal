@@ -28,7 +28,7 @@ export default {
         return {
             title: '',
             content: '',
-            attachment: '',
+            file: '',
         }
     },
     computed: {
@@ -41,7 +41,7 @@ export default {
             {
                 title: this.title,
                 content: this.content,
-                attachment: this.attachment,
+                file: this.attachment,
             })
             .then(() => {
                 console.log(self)

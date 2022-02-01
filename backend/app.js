@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 //sécurité du site
 const helmet = require('helmet');
-const multer = require('multer');
 const rateLimit = require("./middleware/rateLimit");
 
 const authRoutes = require('./routes/auth');
@@ -38,13 +37,7 @@ const db = require("./models");
 db.sequelize.sync();
 
 app.use("/images", express.static(path.join(__dirname, "images")));
-/* const upload = multer({
-    dest: './images'
-});
-app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ res: "cool man!" })
-});
- */
+
 //enregistrement des routes 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
