@@ -28,11 +28,6 @@ export default {
     computed: {
 		...mapState(['user',])
   	},
-    mounted: {
-        myFunction() {
-            document.getElementById("inputId").value = this.$store.state.user.name;
-        },
-    },
     methods: {
         selectFile(event) {
             this.file = event.target.files[0];

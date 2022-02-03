@@ -31,7 +31,7 @@ exports.createOnePost = (req, res) => {
         userId: id,
         title: req.body.title,
         content: req.body.content,
-        attachment: file
+        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
 
     // création d'un post 
@@ -86,10 +86,15 @@ exports.deleteOnePost = (req, res) => {
     db.Post.findOne({
         where: {id: req.params.id || isAdmin == true}
     })
-    .then(() => {    
-        db.Post.destroy({ where: { id: req.params.id }})
-        .then(() => res.status(200).json({ message: "Votre post a bien été supprimé" }))
-        .catch((error) => res.status(400).json({ error }))
+    .then((post) => {    
+        const filename = post.attachment.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            db.Comment.destroy({ where: { postId: req.params.id }})
+            db.Post.destroy({ where: { id: req.params.id }})
+            .then(() => res.status(200).json({ message: "Votre post a bien été supprimé" }))
+            .catch((error) => res.status(400).json({ error }))  
+        })
+        
     })
     .catch((error) => { 
         res.status(400).json({

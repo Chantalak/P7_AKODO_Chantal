@@ -1,5 +1,6 @@
 <template>
-    <form @submit.prevent="createOneComment">
+<div>
+    <form>
         <div class="bg-light p-2">
             <div class="d-flex flex-row align-items-start">
                 <input class="form-control ml-1 shadow-none textarea" v-model="content" type="text" placeholder="Tapez votre commentaire" required />
@@ -11,6 +12,15 @@
             </div>
         </div>
     </form>
+    <div class="comment">
+        <div v-for="comment in comments" :key="comment.id">
+            <div v-show="comment.postId === post.id" class="comment_block w3-row">
+                <span class="w3-rest" style="padding-left:5%">{{ comment.content }} </span> 
+                <span v-if="comment.userId == currentUser.userId" @click="deleteOneComment()" class="w3-col" style="width:5%"><i class="fas fa-minus"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -25,8 +35,11 @@ export default {
         }
     },
 	computed: {
-		...mapState([ 'commentary', 'post' ])
+		...mapState([ 'commentary', 'post', 'comments', 'currentUser' ])
   	},
+    mounted() {
+        this.$store.dispatch('getAllComments');
+    },
     methods: {
         createOneComment() {
             this.$store.dispatch('createOneComment', {
@@ -35,12 +48,29 @@ export default {
             })
             .then((response) => {
                 console.log(response);
-                window.location.reload();
+                //window.location.reload();
             })
             .catch((error) => {
                 console.log(error)
             })
         },
+        deleteOneComment() {
+			this.$store.dispatch('deleteOneComment')
+            .then(() => {
+				alert("Cliquez sur ok et l'utilisateur sera supprimé");
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+		},
     },
 }
 </script>
+
+<style scoped>
+    .comment_block {
+       padding: 2%;
+       border: 1px solid #ced4da;
+       text-align: left;
+    }
+</style>

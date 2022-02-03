@@ -19,14 +19,6 @@
             </div>
         </div>
         <Comments/>
-        <div class="comments">
-            <div class="w3-border w3-container w3-row" v-for="comment in comments" :key="comment.id">
-                <div class="w3-container w3-threequarter" v-if="comment.postId == postId">
-                    {{ comment.content }}
-                </div>
-                <div class="w3-container w3-quarter"><i class="fas fa-times"></i></div>
-            </div>
-        </div>
     </div>              
 </template>
 
@@ -39,7 +31,6 @@ export default {
     data() {
         return {
             postId: this.$route.params.id,
-            content: '',
         }
     },
     components: {
@@ -53,8 +44,6 @@ export default {
             localStorage.postId = this.postId;
         }
         this.$store.dispatch('getOnePost');
-        this.$store.dispatch('getAllComments');
-        this.$store.dispatch('getOneComment');
     },
     methods: {
         deleteOnePost() {

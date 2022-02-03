@@ -76,9 +76,20 @@ exports.deleteOneComment = (req, res) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const isAdmin = decodedToken.isAdmin;
 
-    db.Comment.destroy({ 
-        where: {id: req.body.id || isAdmin} 
+    db.Comment.findOne({
+        where: {id: req.params.id || isAdmin}
     })
-        .then(() => res.status(200).json({ message: 'Commentaire supprimé !'}))
-        .catch(error => res.status(400).json({ error }));
+    .then((commnt) => {
+        db.Comment.destroy({ 
+            where: {id: req.params.id} 
+        })
+            .then(() => res.status(200).json({ message: 'Commentaire supprimé !'}))
+            .catch(error => res.status(400).json({ error }));
+    })
+    .catch((error) => { 
+        res.status(400).json({
+            error: error
+        });
+    });
+    
 };

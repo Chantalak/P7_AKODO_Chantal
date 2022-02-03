@@ -42,7 +42,6 @@ exports.modifyOneUser = (req, res) => {
         })
         .then(() => res.status(200).json({user, file}))
         .catch(error => res.status(400).json({ error }));
-    
     }) 
     .catch((error) => { 
         res.status(400).json({
@@ -53,13 +52,15 @@ exports.modifyOneUser = (req, res) => {
 };
 
 exports.deleteOneUser = (req, res) => {
+    const file = req.file ? req.file.filename : null;
 
     db.User.findOne({
         where: {id: req.params.id }
     })
     .then((user) => {
-        const filename = `./images/${user.imageURL}`;
-        fs.unlink(filename, () => {
+        const filename = user.imageURL.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            db.Comment.destroy({ where: {userId: req.params.id}})
             db.Post.destroy({ where: {userId: req.params.id}})
             db.User.destroy({ where: {id: req.params.id}})
             .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))

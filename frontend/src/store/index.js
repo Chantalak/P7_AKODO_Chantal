@@ -52,6 +52,7 @@ export default new Vuex.Store({
   getters: {
     token: (state) => !!state.currentUser.token,
     id: (state) => state.currentUser.userId,
+    commentId: (state) => state.comments[0].id
   },
   mutations: {
     SET_STATUS(state, status) {
@@ -229,7 +230,6 @@ export default new Vuex.Store({
       commit('SET_STATUS', 'loading'),
       instance.get('/comment/', postDatas)
       .then((response) => {
-        localStorage.setItem('commentId', response.data[0].id);
         commit( 'ALL_COMMENTS', response.data);
         console.log(response)
       })
@@ -249,22 +249,9 @@ export default new Vuex.Store({
         commit('SET_STATUS', 'error');
       })
     },
-    getOneComment({commit}, commentDatas) {
+    deleteOneComment({commit}, commentDatas) {
       commit('SET_STATUS', 'loading'),
-      instance.get('/comment/' + window.localStorage.getItem('commmenId'), commentDatas)
-      .then((response) => {
-        commit( 'DATA_COMMENT', response.data);
-        console.log(response)
-      })
-      .catch(() => {
-        commit('SET_STATUS', 'error');
-      })
-    },
-
-
-    deleteComment({commit}) {
-      commit('SET_STATUS', 'loading'),
-			instance.delete('/comments/delete')
+			instance.delete(`/comment/${this.getters.commentId}`, commentDatas)
 			.then((response)=> {
         commit('SET_STATUS', '');
 				console.log(response);
