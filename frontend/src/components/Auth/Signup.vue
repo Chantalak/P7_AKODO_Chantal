@@ -1,24 +1,17 @@
 <template>
     <main class="main">
         <div class="card">
-            <img class="logo" src="../assets/logo.png" alt="logo Groupomania" />
-            <form class="form" @submit.prevent="submit">
-                <!--Rendu conditionnel login et signup grâce à v-if et v-else-->
-                <!--Récupération des valeurs de nos input avec v-model-->
-                <h1 v-if="mode == 'login'">Se connecter</h1>
-                <h1  v-else>S'inscrire</h1>
+            <img class="logo" src="../../assets/logo.png" alt="logo Groupomania" />
+            <form class="form">
+                <h1 >S'inscrire</h1>
                 
                 <input v-model="email" type="email" placeholder="E-mail" required/>
-                <input v-if="mode == 'create'" v-model="name" type="text" placeholder="Nom complet" required/>
+                <input v-model="name" type="text" placeholder="Nom complet" required/>
                 <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
                 
-                <button class="login" aria-label="Connexion" type="submit" v-if="mode == 'login'" @click="login()"> Connexion </button>
-                <button aria-label="Création de compte" type="submit" v-else @click="signup()"> Créer un compte </button>
+                <button aria-label="Création de compte" type="submit" @click="signup()"> Créer un compte </button>
 
-                <p v-if="mode == 'login'" class="message" >Pas encore de compte? 
-                    <span v-on:click="switchToSignup()"> Créer un compte </span>
-                </p>
-                <p v-else class="message"> Déjà un compte? 
+                <p class="message"> Déjà un compte? 
                     <span v-on:click="switchToLogin()"> Connectez-vous </span>
                 </p>
             </form>
@@ -30,10 +23,9 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'Login',
+    name: 'Signup',
     data() {
         return {
-            mode: 'login',
             email: '',
             name: '',
             password: '',
@@ -43,34 +35,19 @@ export default {
         ...mapState(['status'])
     },
     methods: {
-        //méthodes pour gérer l'affichage mode login et signup
-        switchToSignup() {
-            this.mode = 'create';
-        },
         switchToLogin() {
-            this.mode = 'login';
-        },  
-        login() {
-            const self = this;
-            this.$store.dispatch('login', {
-                email: this.email,
-                password: this.password,
-            })
-            .then(() => {  
-                self.$router.push({name: 'Profil' });
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            this.$router.push({name: 'AuthLogin' });
         },
         signup() {
+            const self = this;
             this.$store.dispatch('signup', {
                 email: this.email,
                 name: this.name,
                 password: this.password,
             })
-            .then(() => {
-                this.mode = 'login';
+            .then((response) => {
+                console.log(response);
+                self.$router.push({name: 'AuthLogin' });
             })
             .catch((error) => {
                 console.log(error);

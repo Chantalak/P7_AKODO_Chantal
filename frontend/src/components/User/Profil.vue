@@ -41,7 +41,7 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'UserProfil',
+	name: 'Profil',
 	mounted() {
 		this.$store.dispatch('getOneUser');
 		this.$store.dispatch('getAllUsers');
@@ -68,7 +68,6 @@ export default {
 				this.$store.replaceState({})
 				localStorage.clear();
 				location.replace(location.origin);
-				//alert("Cliquez sur ok et l'utilisateur sera supprimé");
             })
             .catch((error) => {
                 console.log(error);

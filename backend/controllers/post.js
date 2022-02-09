@@ -21,8 +21,6 @@ exports.createOnePost = (req, res) => {
         return res.status(400).json({message: "Tous les champs doivent être rensignés!"});
     }
 
-    const file = req.file ? req.file.filename : null;
-
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const id = decodedToken.userId;

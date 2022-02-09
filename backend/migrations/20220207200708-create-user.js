@@ -20,13 +20,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      isAdmin: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
       imageURL: {
         allowNull: true,
         type: Sequelize.STRING
+      },
+      isAdmin: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

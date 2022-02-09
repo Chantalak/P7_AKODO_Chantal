@@ -100,26 +100,26 @@ export default new Vuex.Store({
       state.comment = comment;
     },
     
-    
   },
   actions: {
     //AUTH
-    signup({commit}, userDatas) {
+    signup: ({commit}, userDatas) => {
       commit('SET_STATUS', 'loading'),
       instance.post('/auth/signup', userDatas)
       .then((response) => {
         commit('SET_STATUS', 'created');
         console.log(response);
       })
-      .catch(() => {
+      .catch((error) => {
         commit('SET_STATUS', 'error');
-      })
+        console.log(error);
+      }) 
     },
-    login({commit}, userDatas) {
+    login: ({commit}, userDatas) => {
       commit('SET_STATUS', 'loading'),
       instance.post('/auth/login', userDatas)
       .then((response) => {
-        commit('SET_STATUS', '');
+        commit('SET_STATUS', 'login');
         localStorage.setItem('token', response.data.token);
         commit('LOG_USER', response.data);
         console.log(response);

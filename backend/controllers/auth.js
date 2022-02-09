@@ -4,24 +4,20 @@ const jwt = require('jsonwebtoken');
 const db = require("../models");
 
 exports.signup = (req, res, next) => {
-    //récupération paramètres envoyés dans la requête
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
-    const imageURL = req.body.imageURL;
 
-    //vérification que tous les champs obligatoires sont remplis
     if(email === null || name === null || password === null ) {
         return res.status(400).json({ error: "Certains champs ne sont pas bien remplis" });
     }
 
-    //vérification si utilisateur existe déja dans la BDD
     db.User.findOne({
         where: { email: email }
     })
-    .then((user) => {
+    .then(user => {
         if(user){
-            return res.status(500).json({ error: "L'Utilisateur a déjà été enregistré" })
+            return res.status(400).json({ error: "L'Utilisateur a déjà été enregistré" })
         }
         bcrypt.hash(password, 10) 
         .then(hash => {
@@ -31,11 +27,9 @@ exports.signup = (req, res, next) => {
                 password: hash, 
                 isAdmin: 0,
             })
+                .then(() => res.status(201).json({ message: "L'Utilisateur est créé"}))
+                .catch(error => res.status(400).json({ error }));
         });
-        user.save()
-        //message utilisateur est créé ne s'affiche pas
-            .then(() => res.status(201).json({ message: "L'Utilisateur est créé"}))
-            .catch(error => res.status(400).json({ error }));
     })
     .catch((error) => { 
         return res.status(500).json({ error })
@@ -64,7 +58,6 @@ exports.login = (req, res, next) => {
                 if (!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 }
-                //si tout est bon renvoie userID + token à user
                 res.status(200).json({
                     userId: user.id,
                     isAdmin: user.isAdmin,
@@ -79,7 +72,7 @@ exports.login = (req, res, next) => {
                     user: {...user.dataValues } 
                 });
             })
-            .catch(error => res.status(500).json({ error }));
+            .catch(error => res.status(400).json({ error }));
         })
     .catch(error => res.status(500).json({ error }));
 };

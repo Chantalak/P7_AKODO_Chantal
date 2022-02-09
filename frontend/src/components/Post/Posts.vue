@@ -39,7 +39,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'Allposts',
+    name: 'Posts',
 	//moment ou vue est affichée 
 	mounted() {
 		this.$store.dispatch('getAllPosts')

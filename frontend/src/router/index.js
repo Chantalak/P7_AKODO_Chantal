@@ -1,47 +1,49 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Profil from "../views/Profil.vue";
-import Feed from "../views/Feed.vue";
-import AddPost from "../views/AddPost.vue";
+import AuthLogin from "../views/AuthUser/AuthLogin.vue";
+import AuthSignup from "../views/AuthUser/AuthSignup.vue";
+import UserProfil from "../views/GestionUser/UserProfil.vue";
+import UserUpdate from "../views/GestionUser/UserUpdate.vue";
+import AllPosts from "../views/GestionPost/AllPosts.vue";
+
+import CreatePost from "../views/GestionPost/CreatePost.vue";
 import UserArticle from "../views/UserArticle.vue";
-import EditProfil from "../views/EditProfil.vue";
-import DeleteUser from "../components/DeleteUser.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "AuthLogin",
+    component: AuthLogin,
   },
-
+  {
+    path: "/signup",
+    name: "AuthSignup",
+    component: AuthSignup,
+  },
   {
     path: "/profil" ,
-    name: "Profil",
-    component: Profil,
+    name: "UserProfil",
+    component: UserProfil,
   },
   {
     path: "/profil/update" ,
-    name: "EditProfil",
-    component: EditProfil,
-  },
-  {
-    path: "/profil/delete" ,
-    name: "DeleteUser",
-    component: DeleteUser,
+    name: "UserUpdate",
+    component: UserUpdate,
   },
   {
     path: "/feed",
-    name: "Feed",
-    component: Feed,
+    name: "AllPosts",
+    component: AllPosts,
   },
   {
     path: "/feed/add",
-    name: "AddPost",
-    component: AddPost,
+    name: "CreatePost",
+    component: CreatePost,
   },
+
+
   {
     path: "/feed/article/:id",
     name: "UserArticle",

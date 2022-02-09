@@ -18,7 +18,7 @@ import { mapState } from 'vuex'
 //import axios from 'axios'
 
 export default {
-	name: 'UpdateProfil',
+	name: 'Update',
     data() {
         return {
             name: '',

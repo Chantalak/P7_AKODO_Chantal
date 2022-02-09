@@ -1,20 +1,20 @@
 <template>
   <div class="profil">
     <Navbar />
-    <UserProfil />
+    <Profil />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navbar from '../components/Navbar.vue';
-import UserProfil from '@/components/UserProfil.vue'
+import Navbar from '../../components/Navbar.vue';
+import Profil from '../../components/User/Profil.vue'
 
 export default {
-  name: "Profil",
+  name: "UserProfil",
   components: {
     Navbar,
-    UserProfil,
+    Profil,
   },
 };
 </script>

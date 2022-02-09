@@ -58,14 +58,20 @@ exports.deleteOneUser = (req, res) => {
         where: {id: req.params.id }
     })
     .then((user) => {
-        const filename = user.imageURL.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {
-            db.Comment.destroy({ where: {userId: req.params.id}})
-            db.Post.destroy({ where: {userId: req.params.id}})
+        if (db.User.imageURL == null) {
             db.User.destroy({ where: {id: req.params.id}})
-            .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
-            .catch((error) => res.status(400).json({ error }))
-        })
+                .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
+                .catch((error) => res.status(400).json({ error }))
+        } else {
+            const filename = user.imageURL.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                db.Comment.destroy({ where: {userId: req.params.id}})
+                db.Post.destroy({ where: {userId: req.params.id}})
+                db.User.destroy({ where: {id: req.params.id}})
+                .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
+                .catch((error) => res.status(400).json({ error }))
+            })
+        }
     })
     .catch((error) => { 
         res.status(400).json({
