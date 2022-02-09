@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
-
 const db = require("../models");
 const fs = require('fs');
+const xss = require('xss')
 
-// logique métier
 exports.getAllComments = (req, res) => {
     db.Comment.findAll({
         order: [['createdAt', 'DESC']],
@@ -17,8 +16,7 @@ exports.getAllComments = (req, res) => {
 };
 
 exports.createOneComment = (req, res) => {
-     // vérification que tous les champs sont remplis
-     if( !req.body.content ) {
+    if( !req.body.content ) {
         return res.status(400).json({message: "Votre commentaire ne peut pas être vide!"});
     }
 
@@ -26,10 +24,10 @@ exports.createOneComment = (req, res) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     let id = decodedToken.userId;
 
-    db.Comment.create({
-        userId: id,
-        postId: req.body.postId,
-        content: req.body.content,
+    const comment = new db.Comment({
+        userId: xss(id),
+        postId: xss(req.body.postId),
+        content: xss(req.body.content),
     })
     comment.save()
         .then(() => { res.status(201).json({ comment }) })
@@ -51,7 +49,7 @@ exports.getOneComment = (req, res) => {
     });
 };
 
-exports.modifyOneComment = (req, res, next) => {
+exports.modifyOneComment = (req, res) => {
     db.Comment.findOne({
         attributes: ['id', 'content'], 
         where: {id: req.body.id} 
@@ -79,7 +77,7 @@ exports.deleteOneComment = (req, res) => {
     db.Comment.findOne({
         where: {id: req.params.id || isAdmin}
     })
-    .then((commnt) => {
+    .then(() => {
         db.Comment.destroy({ 
             where: {id: req.params.id} 
         })
@@ -90,6 +88,5 @@ exports.deleteOneComment = (req, res) => {
         res.status(400).json({
             error: error
         });
-    });
-    
+    });  
 };

@@ -1,20 +1,20 @@
 <template>
   <div class="article">
     <Navbar />
-    <SelectPost />
+    <Post />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navbar from '../components/Navbar.vue';
-import SelectPost from '@/components/SelectPost.vue'
+import Navbar from '../../components/Navbar.vue';
+import Post from '../../components/Post/Post.vue'
 
 export default {
   name: "Profil",
   components: {
     Navbar,
-    SelectPost,
+    Post,
   },
 };
 </script>

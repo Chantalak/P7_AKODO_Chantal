@@ -116,4 +116,7 @@ export default {
     .button { 
       margin: 0;   
     }
+    .posts {
+        margin-bottom: 2%;
+    }
 </style>

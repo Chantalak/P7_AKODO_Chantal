@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const db = require("../models");
 
 exports.signup = (req, res, next) => {
@@ -51,8 +50,6 @@ exports.login = (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
-        //quand on trouve le bon user 
-        //bcrypt compare MDP user avec hash enregistré avec user
         bcrypt.compare(password, user.password)
             .then(valid => {
                 if (!valid) {

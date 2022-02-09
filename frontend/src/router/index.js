@@ -5,9 +5,8 @@ import AuthSignup from "../views/AuthUser/AuthSignup.vue";
 import UserProfil from "../views/GestionUser/UserProfil.vue";
 import UserUpdate from "../views/GestionUser/UserUpdate.vue";
 import AllPosts from "../views/GestionPost/AllPosts.vue";
-
 import CreatePost from "../views/GestionPost/CreatePost.vue";
-import UserArticle from "../views/UserArticle.vue";
+import OnePost from "../views/GestionPost/OnePost.vue";
 
 Vue.use(VueRouter);
 
@@ -42,12 +41,10 @@ const routes = [
     name: "CreatePost",
     component: CreatePost,
   },
-
-
   {
     path: "/feed/article/:id",
-    name: "UserArticle",
-    component: UserArticle,
+    name: "OnePost",
+    component: OnePost,
   },
 ];
 

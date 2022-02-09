@@ -1,18 +1,18 @@
 <template>
-  <div class="post">
+  <div class="app">
     <Navbar/>
-    <Post/>
+    <Poster/>
   </div>
 </template>
 
 <script>
 import Navbar from '../../components/Navbar.vue';
-import Post from '../../components/Post/Post.vue';
+import Poster from '../../components/Post/Poster.vue';
 
 export default {
   name: "CreatePost",
   components: {
-    Post,
+    Poster,
     Navbar
   },
 };

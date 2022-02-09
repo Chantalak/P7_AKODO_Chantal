@@ -1,5 +1,5 @@
 <template>
-  <div class="posts">
+  <div class="app">
     <Navbar/>
     <Posts/>
   </div>
