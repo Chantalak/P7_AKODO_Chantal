@@ -18,11 +18,11 @@ module.exports = {
       },
       title: {
         allowNull: false,
-        type: Sequelize.STRING(1234)
+        type: Sequelize.STRING
       },
       content: {
         allowNull: false,
-        type: Sequelize.TEXT 
+        type: Sequelize.STRING
       },
       attachment: {
         allowNull: true,

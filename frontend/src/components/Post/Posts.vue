@@ -12,7 +12,7 @@
                                     <div v-for="user in users" :key="user.id">
                                         <div v-if="post.userId == user.id">
                                            <img class="avatar" :src="user.imageURL" alt="photo de profil utilisateur" />
-                                           <span> <i>{{ user.name }}</i> </span>
+                                           <span> {{ user.name }} </span>
                                         </div> 
                                     </div>
                                 </div>

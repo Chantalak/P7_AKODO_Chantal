@@ -33,11 +33,12 @@ exports.modifyOneUser = (req, res) => {
     const file = req.file ? req.file.filename : null;
 
     db.User.findOne({
-        attributes: ['id', 'imageURL',], 
+        attributes: ['id', 'imageURL', 'name'], 
         where: {id: req.params.id} 
     })
     .then((user) => {
         user.update({
+            name: req.body.name,
             imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         })
         .then(() => res.status(200).json({user, file}))

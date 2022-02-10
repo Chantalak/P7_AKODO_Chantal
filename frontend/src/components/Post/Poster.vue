@@ -50,6 +50,7 @@ export default {
             this.$store.dispatch('createOnePost', formData)
             .then(() => {
                 console.log(self)
+                self.$router.push('/feed');
             })
             .catch((error) => {
                 console.log(error)

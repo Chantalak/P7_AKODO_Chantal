@@ -15,6 +15,11 @@
     <div class="comment">
         <div v-for="comment in comments" :key="comment.id">
             <div v-show="comment.postId === post.id" class="comment_block w3-row">
+                <div v-for="user in users" :key="user.id">
+                    <div v-if="comment.userId == user.id">
+                        <span> {{ user.name }} </span>
+                    </div> 
+                </div>
                 <span class="w3-rest" style="padding-left:5%">{{ comment.content }} </span> 
                 <span v-if="comment.userId == currentUser.userId" @click="deleteOneComment()" class="w3-col" style="width:5%"><i class="fas fa-minus"></i></span>
             </div>
@@ -35,7 +40,7 @@ export default {
         }
     },
 	computed: {
-		...mapState([ 'commentary', 'post', 'comments', 'currentUser' ])
+		...mapState([ 'commentary', 'post', 'comments', 'user', 'users', 'currentUser' ])
   	},
     mounted() {
         this.$store.dispatch('getAllComments');

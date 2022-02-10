@@ -1,9 +1,10 @@
 <template>
     <main class="main">
         <form @submit.prevent="modifyOneUser" enctype="multipart/form-data">
+        <h1>Modifier le profil</h1>
             <div class="field">
-                <input v-model="user.name" type="name"/>
-                <input type="file" name="image" @change="selectFile"/>
+                <input v-model="name" :placeholder="user.name" type="name" required/>
+                <input type="file" name="image" @change="selectFile" required/>
             </div>
             <div class="button">  
                 <button class="btn">Envoyer</button>
@@ -36,6 +37,7 @@ export default {
 
         async modifyOneUser() {
             const formData = new FormData();
+            formData.append('name', this.name);
             formData.append('file', this.file);
             const self = this;
 
