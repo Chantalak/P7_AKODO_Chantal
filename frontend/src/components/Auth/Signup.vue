@@ -2,7 +2,7 @@
     <main class="main">
         <div class="card">
             <img class="logo" src="../../assets/logo.png" alt="logo Groupomania" />
-            <form class="form">
+            <form class="form" @submit.prevent="signup" enctype="multipart/form-data">
                 <h1 >S'inscrire</h1>
                 
                 <input v-model="email" type="email" placeholder="E-mail" required/>
@@ -50,7 +50,7 @@ export default {
                 self.$router.push({name: 'AuthLogin' });
             })
             .catch((error) => {
-                console.log(error);
+                alert(error)
             })
         }
     }

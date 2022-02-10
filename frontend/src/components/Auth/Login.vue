@@ -2,13 +2,13 @@
     <main class="main">
         <div class="card">
             <img class="logo" src="../../assets/logo.png" alt="logo Groupomania" />
-            <form class="form">
+            <form class="form" @submit.prevent="login" enctype="multipart/form-data">
                 <h1>Se connecter</h1>
                 
                 <input v-model="email" type="email" placeholder="E-mail" required/>
                 <input v-model="password" type="password" placeholder="Mot de passe" autocomplete="on" required/>
                 
-                <button class="login" aria-label="Connexion" type="submit" @click="login()"> Connexion </button>
+                <button class="login" aria-label="Connexion"> Connexion </button>
 
                 <p class="message" >Pas encore de compte? 
                     <span v-on:click="switchToSignup()"> Créer un compte </span>
@@ -47,7 +47,7 @@ export default {
                 self.$router.push({name: 'UserProfil' });
             })
             .catch((error) => {
-                console.log(error);
+                alert(error)
             })
         },
     }
