@@ -1,19 +1,21 @@
 <template>
-    <div class="card">
-        <div class="post" >
-            <h1 class="card-title"> {{ post.title }} </h1>
-            <div class="box">
-                <p class="card-content"> {{ post.content }} </p>
-                <div v-if="post.attachment">
-                    <img class="avatar" :src="post.attachment" alt="photo du post" />
+    <main class="main">  
+        <div class="card">
+            <div class="post" >
+                <h1 class="card-title"> {{ post.title }} </h1>
+                <div class="box">
+                    <p class="card-content"> {{ post.content }} </p>
+                    <div v-if="post.attachment">
+                        <img class="avatar" :src="post.attachment" alt="photo du post" />
+                    </div>
+                </div>       
+                <div v-if="currentUser.userId == post.userId || currentUser.isAdmin == true">
+                    <button aria-label="Suppression de votre post" class="btn btn-danger" type="submit" v-on:click="deleteOnePost()"> Supprimer votre Article </button>
                 </div>
-            </div>       
-            <div v-if="currentUser.userId == post.userId || currentUser.isAdmin == true">
-                <button aria-label="Suppression de votre post" class="btn btn-danger" type="submit" v-on:click="deleteOnePost()"> Supprimer votre Article </button>
             </div>
-        </div>
-        <Comments/>
-    </div>              
+            <Comments/>
+        </div>              
+    </main>
 </template>
 
 <script>

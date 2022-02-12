@@ -7,7 +7,7 @@
 			</div>
 			<div class="info">
 				<span> Nom : {{ user.name }} </span>
-				<span><a v-bind:href="`mailto:${ user.email }`">Envoyer un mail</a></span>
+				<!-- <span><a v-bind:href="`mailto:${ user.email }`">Envoyer un mail</a></span> -->
 				<div v-if="user.isAdmin == true">
 					<span>Nombre d'utilisateurs :</span>
 						{{ users.length }}
@@ -21,7 +21,7 @@
 
 			<div id="id01" class="modal">
 			<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
-			<form class="modal-content" action="/action_page.php">
+			<form class="modal-content">
 				<div class="container">
 				<h1> Suppression compte </h1>
 				<p> Êtes-vous certain(e)s de vouloir supprimer votre compte ?</p>

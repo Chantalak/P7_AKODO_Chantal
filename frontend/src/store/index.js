@@ -30,7 +30,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: {
-      isLoggedIn: !!localStorage.getItem("token")
+      isLoggedIn: !!localStorage.getItem('token')
     },
 
     //AUTH
