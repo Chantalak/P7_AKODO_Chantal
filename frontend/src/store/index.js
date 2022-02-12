@@ -29,7 +29,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    status: '',
+    status: {
+      isLoggedIn: !!localStorage.getItem("token")
+    },
 
     //AUTH
     currentUser: {}, 
@@ -50,7 +52,7 @@ export default new Vuex.Store({
 
   },
   getters: {
-    token: (state) => !!state.currentUser.token,
+    isLoggedIn: (state) => state.isLoggedIn,
     id: (state) => state.currentUser.userId,
     commentId: (state) => state.comments[0].id
   },
@@ -69,9 +71,16 @@ export default new Vuex.Store({
     ALL_USERS(state, users){
       state.users = users;
     },
+    LOG_IN (state) {
+      state.pending = true;
+    },
     DATA_USER(state, user) {
       window.localStorage.user = JSON.stringify(user);
       state.user = user;
+      state.isLoggedIn = true;
+    },
+    LOG_OUT(state) {
+      state.isLoggedIn = false;
     },
 
     //POST
@@ -136,6 +145,11 @@ export default new Vuex.Store({
           console.log(error);
         })
       })
+    },
+    logout: ({commit}) => {
+      localStorage.clear();
+      location.replace(location.origin); 
+      commit('LOG_OUT');
     },
 
     //USER

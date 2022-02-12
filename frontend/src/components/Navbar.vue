@@ -12,7 +12,7 @@
                     <router-link to="/feed"> <i class="far fa-newspaper"></i> Feed </router-link>
                 </li>
                 <li class="item">
-                    <button type="button" class="btn btn-danger" @click="disconnect">Déconnexion</button>
+                    <button type="button" class="btn btn-danger" @click="logout">Déconnexion</button>
                 </li>
             </ul>
         </nav>
@@ -24,9 +24,8 @@
 export default {
     name: 'Navbar',
     methods: {
-        disconnect() {
-            localStorage.clear();
-            location.replace(location.origin);
+        logout() {
+            this.$store.dispatch('logout')
         }
     }
 }
